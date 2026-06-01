@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -801,6 +802,45 @@
       margin: 0;
       color: var(--cream);
     }
+    .wm-title-link.wm-inline {
+      font-family: inherit;
+      font-weight: inherit;
+      font-size: inherit;
+      letter-spacing: inherit;
+    }
+    .wm-title-link {
+      text-decoration: none;
+      position: relative;
+      letter-spacing: 0.06em;
+      font-family: var(--font-mono);
+      font-weight: 500;
+    }
+    .wm-word-water {
+      color: var(--cream);
+      transition: color 0.2s;
+    }
+    .wm-word-mark {
+      color: #4ecdc4;
+      transition: color 0.2s, text-shadow 0.2s;
+    }
+    .wm-title-link::after {
+      content: " ↗";
+      font-size: 0.45em;
+      color: #4ecdc4;
+      vertical-align: super;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .wm-title-link:hover .wm-word-water {
+      color: #e0f7f6;
+    }
+    .wm-title-link:hover .wm-word-mark {
+      color: #7ef5ee;
+      text-shadow: 0 0 18px rgba(78, 205, 196, 0.6), 0 0 40px rgba(78, 205, 196, 0.25);
+    }
+    .wm-title-link:hover::after {
+      opacity: 1;
+    }
     .wm-title-block .wm-sub {
       color: var(--gold);
       font-family: var(--font-mono);
@@ -1060,9 +1100,6 @@
           My interests span Linux, cloud computing, cybersecurity, automation, artificial intelligence, and emerging technologies. I enjoy hands-on learning and building projects that deepen my understanding of systems, infrastructure, networking, and security. I'm especially interested in how technology can be used to solve real-world challenges and help people and organizations make better decisions.
         </p>
         <p>
-          Beyond technology, I'm deeply passionate about writing, reading, storytelling, personal development, spirituality, fashion, lifestyle, wellness, and creativity. I enjoy exploring ideas that help people live with greater purpose, self-awareness, and intention. Whether through books, meaningful conversations, travel, reflection, or creative expression, I'm constantly seeking opportunities to learn, grow, and better understand both the world and myself.
-        </p>
-        <p>
           I believe that some of life's most important questions exist at the intersection of science, technology, philosophy, and spirituality. I'm fascinated by human potential, personal transformation, and the ways in which knowledge, wisdom, and innovation can be used to create a more fulfilling and impactful life.
         </p>
         <p>
@@ -1083,14 +1120,14 @@
       <div class="watermark-zone">
         <div class="wm-header">
           <div class="wm-title-block">
-            <h3>WATERMARK METER</h3>
+            <h3><a href="https://github.com/JaninaZV/Watermark" target="_blank" rel="noopener" class="wm-title-link"><span class="wm-word-water">WATER</span><span class="wm-word-mark">MARK</span></a></h3>
             <p class="wm-sub">OPEN SOURCE · METHODOLOGY-FIRST · v0.1</p>
           </div>
           <span class="wm-status-pill">● ACTIVE DEVELOPMENT</span>
         </div>
 
         <p class="wm-pitch">
-          <strong>Watermark</strong> is my current focus — an open-source CLI that measures the real energy, carbon, and water footprint of AI workloads. Not a guess from <code>cpu_percent</code>, but hardware reads where possible (RAPL, NVML), regional grid data where we must model, and <strong>every number tagged</strong> so reviewers can audit or challenge any assumption. Each run ships <code>measurements.csv</code>, <code>summary.json</code>, and interactive HTML dashboards — plus a portfolio view to compare the same workload across regions.
+          <strong><a href="https://github.com/JaninaZV/Watermark" target="_blank" rel="noopener" class="wm-title-link wm-inline"><span class="wm-word-water">Water</span><span class="wm-word-mark">mark</span></a></strong> is my current focus — an open-source CLI that measures the real energy, carbon, and water footprint of AI workloads. Not a guess from <code>cpu_percent</code>, but hardware reads where possible (RAPL, NVML), regional grid data where we must model, and <strong>every number tagged</strong> so reviewers can audit or challenge any assumption. Each run ships <code>measurements.csv</code>, <code>summary.json</code>, and interactive HTML dashboards — plus a portfolio view to compare the same workload across regions.
         </p>
 
         <div class="wm-metrics" aria-label="What Watermark measures">
@@ -1266,7 +1303,7 @@
     <section id="projects">
       <p class="section-label">Projects</p>
       <h2 class="section-title">Fellowship & Lab Work</h2>
-      <p class="projects-subtitle">Hands-on projects from cybersecurity training — before Watermark became the main build.</p>
+      <p class="projects-subtitle">Hands-on projects from cybersecurity training — before <a href="https://github.com/JaninaZV/Watermark" target="_blank" rel="noopener" class="wm-title-link wm-inline"><span class="wm-word-water">Water</span><span class="wm-word-mark">mark</span></a> became the main build.</p>
       <div class="project-grid">
         <button type="button" class="project-card" data-project="aws">
           <div class="card-accent"></div>
@@ -1380,8 +1417,8 @@
         links: [],
       },
       watermark: {
-        title: "Watermark Meter",
-        body: `<p><strong>Watermark</strong> is an open-source CLI that measures the true energy, carbon, and water cost of AI workloads — with every assumption auditable.</p>
+        title: "Watermark",
+        body: `<p><strong><a href="https://github.com/JaninaZV/Watermark" target="_blank" rel="noopener" class="wm-title-link wm-inline"><span class="wm-word-water">Water</span><span class="wm-word-mark">mark</span></a></strong> is an open-source CLI that measures the true energy, carbon, and water cost of AI workloads — with every assumption auditable.</p>
           <ul>
             <li>Reads CPU energy from RAPL and GPU power from NVML when available</li>
             <li>Regional grid carbon, PUE, WUE, and watershed stress modeling</li>
