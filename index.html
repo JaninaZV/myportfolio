@@ -795,28 +795,6 @@
       position: relative;
       z-index: 1;
     }
-    .wm-wordmark {
-      font-family: var(--font-display);
-      font-size: clamp(2rem, 5vw, 3rem);
-      font-weight: 600;
-      margin: 0;
-      letter-spacing: 0.04em;
-      line-height: 1.1;
-      position: relative;
-      z-index: 1;
-      text-align: center;
-    }
-    .wm-wordmark .wm-water {
-      color: #fff;
-    }
-    .wm-wordmark a.wm-mark {
-      color: #5eb8ff;
-      text-decoration: none;
-    }
-    .wm-wordmark a.wm-mark:hover {
-      color: #8ecfff;
-      text-decoration: underline;
-    }
     .wm-title-block h3 {
       font-family: var(--font-display);
       font-size: clamp(1.6rem, 4vw, 2.25rem);
@@ -1101,10 +1079,86 @@
 
     <section id="watermark">
       <p class="section-label">Featured project</p>
+      <h2 class="section-title">What I’m Building Now</h2>
       <div class="watermark-zone">
-        <h2 class="wm-wordmark" aria-label="WaterMark">
-          <span class="wm-water">Water</span><a class="wm-mark" href="#watermark">Mark</a>
-        </h2>
+        <div class="wm-header">
+          <div class="wm-title-block">
+            <h3>WATERMARK METER</h3>
+            <p class="wm-sub">OPEN SOURCE · METHODOLOGY-FIRST · v0.1</p>
+          </div>
+          <span class="wm-status-pill">● ACTIVE DEVELOPMENT</span>
+        </div>
+
+        <p class="wm-pitch">
+          <strong>Watermark</strong> is my current focus — an open-source CLI that measures the real energy, carbon, and water footprint of AI workloads. Not a guess from <code>cpu_percent</code>, but hardware reads where possible (RAPL, NVML), regional grid data where we must model, and <strong>every number tagged</strong> so reviewers can audit or challenge any assumption. Each run ships <code>measurements.csv</code>, <code>summary.json</code>, and interactive HTML dashboards — plus a portfolio view to compare the same workload across regions.
+        </p>
+
+        <div class="wm-metrics" aria-label="What Watermark measures">
+          <div class="wm-metric" title="Intel/AMD RAPL + NVIDIA NVML">
+            <span class="val">⚡ ENERGY</span>
+            <span class="lbl">RAPL · NVML · GPU</span>
+          </div>
+          <div class="wm-metric" title="EPA eGRID + IEA regional profiles">
+            <span class="val">🌫 CO₂e</span>
+            <span class="lbl">GRID CARBON</span>
+          </div>
+          <div class="wm-metric" title="WUE + generation water">
+            <span class="val">💧 H₂O</span>
+            <span class="lbl">DIRECT + INDIRECT</span>
+          </div>
+          <div class="wm-metric" title="WRI Aqueduct weighting">
+            <span class="val">◎ STRESS</span>
+            <span class="lbl">WATERSHED</span>
+          </div>
+          <div class="wm-metric" title="Measured vs modeled tags">
+            <span class="val">⌗ AUDIT</span>
+            <span class="lbl">SOURCE TAGS</span>
+          </div>
+        </div>
+
+        <div class="wm-split">
+          <div class="wm-terminal" aria-label="Example Watermark command output">
+            <div class="line"><span class="dim">$</span> watermark --duration 60 --region us-east-1 --output ./run1</div>
+            <div class="line"><span class="dim">[rapl_measured]</span> CPU package energy <span class="hi">integrated</span></div>
+            <div class="line"><span class="dim">[nvml_pynvml]</span> GPU board power <span class="hi">sampled</span></div>
+            <div class="line"><span class="dim">[pue_multiplier]</span> facility_kwh = it_kwh × 1.58</div>
+            <div class="line"><span class="dim">[modeled_annual_average]</span> co2e_kg → <span class="hi">tagged</span></div>
+            <div class="line">→ measurements.csv · summary.json · dashboard.html</div>
+            <div class="line"><span class="hi">✓</span> reproducible footprint report ready</div>
+          </div>
+
+          <div class="wm-log panel" style="background: rgba(0,0,0,0.25); border: 1px solid rgba(201,168,124,0.3);">
+            <h4>FIELD NOTES — RECENT WORK</h4>
+            <ul class="wm-log-list" id="wm-log-list">
+              <li class="wm-log-item active" data-detail="Core metering engine: per-sample CSV, monotonic clock integration, RAPL wrap-around handling, multi-GPU NVML fallback via nvidia-smi.">
+                <span class="phase">CORE</span>
+                <span>Built the metering engine with hardware-first reads and honest fallbacks when RAPL isn’t available.</span>
+              </li>
+              <li class="wm-log-item" data-detail="Carbon, water, PUE, WUE, embodied preview (--hardware-sku), and WRI Aqueduct stress — each output line carries a source tag.">
+                <span class="phase">MODEL</span>
+                <span>Documented methodology (METHODOLOGY.md) so every modeled constant is challengeable.</span>
+              </li>
+              <li class="wm-log-item" data-detail="Auto-generated dashboard.html per run; portfolio.html scans summary.json trees for cross-region comparison.">
+                <span class="phase">VIZ</span>
+                <span>Shipped interactive dashboards and portfolio aggregation for benchmark-style comparisons.</span>
+              </li>
+              <li class="wm-log-item" data-detail="RunPod pod_setup.sh, workload wrappers, text/image/code/embeddings generators for repeatable experiments.">
+                <span class="phase">GPU</span>
+                <span>Tested on cloud GPU pods — wrapping real AI workloads, not synthetic loops.</span>
+              </li>
+              <li class="wm-log-item" data-detail="test_dashboard.py + test_portfolio.py — 44 tests guarding math and HTML output behavior.">
+                <span class="phase">QA</span>
+                <span>Added pytest coverage for dashboard and portfolio behavior before publishing numbers.</span>
+              </li>
+            </ul>
+            <p id="wm-log-detail" style="margin: 1rem 0 0; font-size: 0.82rem; color: var(--rose); min-height: 3em; line-height: 1.6;"></p>
+          </div>
+        </div>
+
+        <div class="wm-actions">
+          <a class="btn btn-primary" href="https://github.com/JaninaZV/Watermark" target="_blank" rel="noopener">VIEW ON GITHUB ↗</a>
+          <a class="btn btn-ghost" href="https://github.com/JaninaZV/Watermark/blob/master/METHODOLOGY.md" target="_blank" rel="noopener">READ METHODOLOGY</a>
+        </div>
       </div>
     </section>
 
