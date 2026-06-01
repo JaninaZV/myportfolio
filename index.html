@@ -1058,7 +1058,7 @@
   </div>
 
   <nav>
-    <a href="#top" class="nav-logo">Janina (Nina)</a>
+    <a href="#top" class="nav-logo">Janina</a>
     <ul class="nav-links">
       <li><a href="#about">ABOUT</a></li>
       <li><a href="#watermark">FEATURED</a></li>
@@ -1452,27 +1452,30 @@
 
     // Typewriter
     const roles = [
-      "Building Watermark — AI footprint metering",
-      "Systems Engineer · Enterprise infrastructure",
-      "Security+ · RHEL · AWS · VMS",
+      { text: "Building Watermark — AI footprint metering", html: 'Building <span class="wm-word-water">Water</span><span class="wm-word-mark">mark</span> — AI footprint metering' },
+      { text: "Systems Engineer \xB7 Enterprise infrastructure" },
+      { text: "Security+ \xB7 RHEL \xB7 AWS \xB7 VMS" },
     ];
     const tw = document.getElementById("typewriter");
-    let ri = 0, ci = 0, deleting = false;
+    let ri = 0, ci = 0, deleting = false, styled = false;
     function typeTick() {
-      const current = roles[ri];
+      const role = roles[ri];
+      const text = role.text;
       if (!deleting) {
-        tw.textContent = current.slice(0, ++ci);
-        if (ci === current.length) {
+        ci++;
+        if (ci === text.length) {
+          if (role.html) { tw.innerHTML = role.html; styled = true; }
+          else tw.textContent = text;
           deleting = true;
           setTimeout(typeTick, 2200);
           return;
         }
+        tw.textContent = text.slice(0, ci);
       } else {
-        tw.textContent = current.slice(0, --ci);
-        if (ci === 0) {
-          deleting = false;
-          ri = (ri + 1) % roles.length;
-        }
+        if (styled) { tw.textContent = text; styled = false; }
+        ci--;
+        tw.textContent = text.slice(0, ci);
+        if (ci === 0) { deleting = false; ri = (ri + 1) % roles.length; }
       }
       setTimeout(typeTick, deleting ? 40 : 70);
     }
