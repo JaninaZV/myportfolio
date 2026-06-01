@@ -952,6 +952,97 @@
       to { opacity: 1; transform: translateX(0); }
     }
 
+    .wm-insight {
+      background: #100a0e;
+      border: 1px solid rgba(201, 168, 124, 0.45);
+      padding: 1.5rem;
+      border-radius: 2px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      min-height: 220px;
+    }
+    .wm-problem-label {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      margin: 0;
+    }
+    .wm-problem-text {
+      font-size: 0.92rem;
+      line-height: 1.7;
+      color: var(--text);
+      margin: 0;
+    }
+    .wm-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+    }
+    .wm-stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 0.85rem 0.5rem;
+      border: 1px solid rgba(232, 164, 184, 0.2);
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 2px;
+      gap: 0.2rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: default;
+    }
+    .wm-stat:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--glow-rose);
+      border-color: var(--rose);
+    }
+    .wm-stat-icon { font-size: 1.1rem; }
+    .wm-stat-val {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .wm-stat-val::before { content: ""; }
+    .wm-stat-unit {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+    .wm-stat-lbl {
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.12em;
+      color: var(--rose);
+      margin-top: 0.2rem;
+    }
+    .wm-stat-src {
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      color: var(--muted);
+      opacity: 0.7;
+    }
+    .wm-stat-compare {
+      font-family: var(--font-mono);
+      font-size: 0.56rem;
+      color: var(--gold);
+      opacity: 0.75;
+      text-align: center;
+      line-height: 1.4;
+      margin-top: 0.15rem;
+    }
+    .wm-stat-caption {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      color: var(--muted);
+      margin: 0;
+      letter-spacing: 0.06em;
+      opacity: 0.7;
+    }
+
     .wm-log h4 {
       font-family: var(--font-mono);
       font-size: 0.78rem;
@@ -1154,14 +1245,36 @@
         </div>
 
         <div class="wm-split">
-          <div class="wm-terminal" aria-label="Example Watermark command output">
-            <div class="line"><span class="dim">$</span> watermark --duration 60 --region us-east-1 --output ./run1</div>
-            <div class="line"><span class="dim">[rapl_measured]</span> CPU package energy <span class="hi">integrated</span></div>
-            <div class="line"><span class="dim">[nvml_pynvml]</span> GPU board power <span class="hi">sampled</span></div>
-            <div class="line"><span class="dim">[pue_multiplier]</span> facility_kwh = it_kwh × 1.58</div>
-            <div class="line"><span class="dim">[modeled_annual_average]</span> co2e_kg → <span class="hi">tagged</span></div>
-            <div class="line">→ measurements.csv · summary.json · dashboard.html</div>
-            <div class="line"><span class="hi">✓</span> reproducible footprint report ready</div>
+          <div class="wm-insight" aria-label="What Watermark is trying to solve">
+            <p class="wm-problem-label">THE PROBLEM</p>
+            <p class="wm-problem-text">AI workloads burn energy, emit carbon, and consume water. Most tools don't measure it — or don't show their work. <span class="wm-word-water">Water</span><span class="wm-word-mark">mark</span> is an attempt to change that.</p>
+            <div class="wm-stats">
+              <div class="wm-stat">
+                <span class="wm-stat-icon">⚡</span>
+                <span class="wm-stat-val" data-target="0.4">0</span>
+                <span class="wm-stat-unit">kWh</span>
+                <span class="wm-stat-lbl">ENERGY</span>
+                <span class="wm-stat-src">hardware read</span>
+                <span class="wm-stat-compare">≈ charging your phone 30×</span>
+              </div>
+              <div class="wm-stat">
+                <span class="wm-stat-icon">🌫</span>
+                <span class="wm-stat-val" data-target="180">0</span>
+                <span class="wm-stat-unit">g CO₂e</span>
+                <span class="wm-stat-lbl">CARBON</span>
+                <span class="wm-stat-src">grid model</span>
+                <span class="wm-stat-compare">≈ driving half a mile</span>
+              </div>
+              <div class="wm-stat">
+                <span class="wm-stat-icon">💧</span>
+                <span class="wm-stat-val" data-target="0.8">0</span>
+                <span class="wm-stat-unit">L H₂O</span>
+                <span class="wm-stat-lbl">WATER</span>
+                <span class="wm-stat-src">wue estimate</span>
+                <span class="wm-stat-compare">≈ less than a water bottle</span>
+              </div>
+            </div>
+            <p class="wm-stat-caption">example run · 60s inference · us-east-1 · estimated</p>
           </div>
 
           <div class="wm-log panel" style="background: rgba(0,0,0,0.25); border: 1px solid rgba(201,168,124,0.3);">
@@ -1505,6 +1618,30 @@
       if (e.key === "Escape" && !bootEl.classList.contains("hidden")) endBoot();
     });
     showBoot();
+
+    // Stat count-up on scroll into view
+    const statVals = document.querySelectorAll(".wm-stat-val");
+    const countObs = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        statVals.forEach((el) => {
+          const target = parseFloat(el.dataset.target);
+          const isDecimal = target < 10;
+          const duration = 1200;
+          const steps = 40;
+          let step = 0;
+          const interval = setInterval(() => {
+            step++;
+            const val = target * (step / steps);
+            el.textContent = "~" + (isDecimal ? val.toFixed(1) : Math.round(val));
+            if (step >= steps) { el.textContent = "~" + (isDecimal ? target.toFixed(1) : target); clearInterval(interval); }
+          }, duration / steps);
+        });
+        countObs.disconnect();
+      });
+    }, { threshold: 0.4 });
+    const insightEl = document.querySelector(".wm-insight");
+    if (insightEl) countObs.observe(insightEl);
 
     // Watermark build log
     const wmLogItems = document.querySelectorAll(".wm-log-item");
