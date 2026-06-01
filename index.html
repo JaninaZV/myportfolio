@@ -1,0 +1,1648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Janina (Nina) — technologist, writer, and builder exploring Linux, cybersecurity, AI, and sustainable innovation." />
+  <title>Janina (Nina) | Case File</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #161018;
+      --bg-panel: rgba(36, 26, 34, 0.92);
+      --rose: #e8a4b8;
+      --blush: #f4c4d0;
+      --plum: #6b3a5a;
+      --wine: #9e3d5c;
+      --gold: #c9a87c;
+      --cream: #f5ebe0;
+      --text: #f0e6dc;
+      --muted: #b09aa8;
+      --border: rgba(232, 164, 184, 0.32);
+      --accent: #e879a6;
+      --evidence: #d4a574;
+      --glow-rose: 0 0 24px rgba(232, 121, 166, 0.35), 0 0 48px rgba(232, 121, 166, 0.12);
+      --glow-gold: 0 0 20px rgba(201, 168, 124, 0.35);
+      /* legacy aliases for minimal JS/canvas churn */
+      --cyan: var(--rose);
+      --magenta: var(--accent);
+      --lime: var(--gold);
+      --amber: var(--evidence);
+      --font-display: "Cormorant Garamond", Georgia, serif;
+      --font-body: "Source Serif 4", Georgia, serif;
+      --font-mono: "IBM Plex Mono", "Courier New", monospace;
+      --prose-width: 42rem;
+      --line-body: 1.8;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      font-size: 1.05rem;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      min-height: 100vh;
+      line-height: var(--line-body);
+    }
+
+    #grid-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Taurus constellation — subtle background accent */
+    .taurus-bg {
+      position: fixed;
+      top: 6%;
+      right: 2%;
+      width: min(38vw, 340px);
+      height: auto;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.11;
+    }
+    .taurus-bg line {
+      stroke: var(--rose);
+      stroke-width: 0.6;
+      stroke-opacity: 0.55;
+    }
+    .taurus-bg .star {
+      fill: var(--blush);
+    }
+    .taurus-bg .star-bright {
+      fill: var(--gold);
+    }
+    .taurus-bg .star-dim {
+      fill: var(--rose);
+      opacity: 0.65;
+    }
+    .taurus-bg .pleiades .star {
+      fill: var(--blush);
+      opacity: 0.5;
+    }
+    @media (max-width: 768px) {
+      .taurus-bg {
+        top: 4%;
+        right: -4%;
+        width: min(52vw, 260px);
+        opacity: 0.07;
+      }
+    }
+
+    .scanlines {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 3px,
+        rgba(22, 16, 24, 0.06) 3px,
+        rgba(22, 16, 24, 0.06) 6px
+      );
+      opacity: 0.25;
+    }
+
+    .vignette {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      background: radial-gradient(ellipse at center, transparent 45%, rgba(22, 16, 24, 0.65) 100%);
+    }
+
+    /* Case file watermark overlay */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Ccircle cx='52' cy='52' r='28' fill='none' stroke='%23e8a4b8' stroke-width='3'/%3E%3Cline x1='72' y1='72' x2='98' y2='98' stroke='%23e8a4b8' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-size: 180px 180px;
+    }
+
+    /* Boot — case file opening */
+    #boot {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: #120c10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      transition: opacity 0.6s ease, visibility 0.6s;
+    }
+    #boot.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .boot-inner {
+      width: min(640px, 100%);
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      line-height: 1.75;
+      color: var(--gold);
+      text-shadow: 0 0 8px rgba(201, 168, 124, 0.35);
+    }
+    .boot-inner .cursor {
+      display: inline-block;
+      width: 8px;
+      height: 1em;
+      background: var(--rose);
+      animation: blink 0.8s step-end infinite;
+      vertical-align: text-bottom;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+    .boot-skip {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 10000;
+      background: transparent;
+      border: 1px solid var(--rose);
+      color: var(--rose);
+      font-family: var(--font-mono);
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+    }
+    .boot-skip:hover { box-shadow: var(--glow-rose); }
+
+    /* Nav */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem 1.5rem;
+      background: rgba(22, 16, 24, 0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: var(--rose);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+    }
+    .nav-links {
+      display: flex;
+      gap: 0.25rem;
+      flex-wrap: wrap;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+      padding: 0.45rem 0.7rem;
+      border: 1px solid transparent;
+      border-radius: 2px;
+      transition: color 0.2s, border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--cream);
+      border-color: var(--border);
+      background: rgba(232, 164, 184, 0.08);
+      box-shadow: var(--glow-rose);
+    }
+
+    main {
+      position: relative;
+      z-index: 10;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 6.5rem 1.75rem 4rem;
+    }
+
+    section {
+      margin-bottom: 5.5rem;
+      scroll-margin-top: 5.5rem;
+    }
+
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
+      text-transform: uppercase;
+    }
+    .section-label::before {
+      content: "🔍 ";
+      font-size: 0.85em;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.75rem, 4vw, 2.35rem);
+      font-weight: 700;
+      margin: 0 0 1.75rem;
+      color: var(--cream);
+      letter-spacing: 0.02em;
+    }
+    .section-title::after {
+      content: "";
+      display: block;
+      width: 72px;
+      height: 2px;
+      margin-top: 0.65rem;
+      background: linear-gradient(90deg, var(--rose), var(--gold));
+    }
+
+    /* Hero */
+    .hero {
+      min-height: 70vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 2rem;
+    }
+    .hero-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--gold);
+      margin-bottom: 1.25rem;
+      letter-spacing: 0.12em;
+    }
+    .hero-status .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--rose);
+      box-shadow: 0 0 12px var(--rose);
+      animation: pulse-dot 2s ease infinite;
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.85); }
+    }
+
+    .glitch-wrap {
+      position: relative;
+      margin-bottom: 0.5rem;
+    }
+    .hero-name {
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 8vw, 4rem);
+      font-weight: 700;
+      margin: 0;
+      color: var(--cream);
+      letter-spacing: 0.03em;
+      position: relative;
+    }
+    .hero-name::before,
+    .hero-name::after {
+      content: attr(data-text);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      overflow: hidden;
+      clip-path: inset(0);
+    }
+    .hero-name::before {
+      color: var(--blush);
+      animation: glitch-1 4s infinite linear alternate-reverse;
+      z-index: -1;
+    }
+    .hero-name::after {
+      color: var(--wine);
+      animation: glitch-2 3.5s infinite linear alternate-reverse;
+      z-index: -2;
+    }
+    @keyframes glitch-1 {
+      0%, 90%, 100% { transform: translate(0); clip-path: inset(40% 0 50% 0); }
+      92% { transform: translate(-3px, 1px); clip-path: inset(10% 0 80% 0); }
+      94% { transform: translate(3px, -1px); clip-path: inset(60% 0 20% 0); }
+    }
+    @keyframes glitch-2 {
+      0%, 88%, 100% { transform: translate(0); clip-path: inset(70% 0 10% 0); }
+      90% { transform: translate(2px, 2px); clip-path: inset(5% 0 90% 0); }
+      93% { transform: translate(-2px, 0); clip-path: inset(30% 0 50% 0); }
+    }
+
+    .hero-role {
+      font-family: var(--font-mono);
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      color: var(--rose);
+      margin: 0.75rem 0 1.75rem;
+      min-height: 1.5em;
+    }
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+    .chip-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.55rem 1rem;
+      border: 1px solid var(--border);
+      background: var(--bg-panel);
+      color: var(--text);
+      text-decoration: none;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      border-radius: 2px;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    }
+    .chip-link:hover {
+      transform: translateY(-2px);
+      border-color: var(--rose);
+      box-shadow: var(--glow-rose);
+      color: var(--cream);
+    }
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .btn {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      padding: 0.9rem 1.5rem;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      border-radius: 2px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, rgba(232, 164, 184, 0.18), rgba(158, 61, 92, 0.15));
+      color: var(--cream);
+      border: 1px solid var(--rose);
+    }
+    .btn-primary:hover {
+      box-shadow: var(--glow-rose);
+      transform: scale(1.02);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--blush);
+      border: 1px solid var(--accent);
+    }
+    .btn-ghost:hover {
+      box-shadow: var(--glow-gold);
+      transform: scale(1.02);
+    }
+
+    /* Panels — case file folders */
+    .panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      padding: 1.75rem;
+      position: relative;
+      border-radius: 2px 6px 6px 6px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+    }
+    .panel::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(180deg, var(--rose), var(--gold));
+      border-radius: 2px 0 0 6px;
+    }
+    .panel::after {
+      content: "CONFIDENTIAL";
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.25em;
+      color: var(--wine);
+      border: 1px solid rgba(158, 61, 92, 0.45);
+      padding: 0.2rem 0.45rem;
+      opacity: 0.55;
+      transform: rotate(-4deg);
+      pointer-events: none;
+    }
+
+    /* Skills */
+    .skill-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+    .skill-tag {
+      padding: 0.5rem 1rem;
+      border: 1px solid rgba(201, 168, 124, 0.4);
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      cursor: default;
+      border-radius: 2px;
+      transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+      background: rgba(201, 168, 124, 0.06);
+    }
+    .skill-tag:hover {
+      transform: scale(1.05);
+      box-shadow: var(--glow-gold);
+      background: rgba(201, 168, 124, 0.12);
+    }
+    .skill-tag[data-tier="core"] { border-color: rgba(232, 164, 184, 0.5); color: var(--rose); background: rgba(232, 164, 184, 0.06); }
+    .skill-tag[data-tier="sec"] { border-color: rgba(158, 61, 92, 0.5); color: var(--blush); background: rgba(158, 61, 92, 0.08); }
+    .skill-tag[data-tier="cloud"] { border-color: rgba(201, 168, 124, 0.5); color: var(--evidence); }
+
+    .cert-grid {
+      display: grid;
+      gap: 1rem;
+    }
+    @media (min-width: 600px) {
+      .cert-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .cert-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      color: var(--cream);
+      margin: 0 0 0.5rem;
+    }
+    .cert-card .cert-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      border: 1px solid rgba(201, 168, 124, 0.45);
+      padding: 0.25rem 0.55rem;
+      margin-bottom: 0.85rem;
+      border-radius: 2px;
+    }
+    .cert-card p { margin: 0; font-size: 0.98rem; line-height: var(--line-body); color: var(--text); }
+
+    /* Experience timeline */
+    .timeline { position: relative; padding-left: 1.5rem; }
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--rose), var(--gold), transparent);
+    }
+    .job-card {
+      position: relative;
+      margin-bottom: 1.5rem;
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      border-radius: 2px;
+      transition: border-color 0.25s;
+    }
+    .job-card::before {
+      content: "";
+      position: absolute;
+      left: -1.5rem;
+      top: 1.25rem;
+      width: 10px;
+      height: 10px;
+      background: var(--rose);
+      box-shadow: 0 0 10px var(--rose);
+      transform: translateX(-50%);
+      border-radius: 50%;
+    }
+    .job-header {
+      width: 100%;
+      text-align: left;
+      background: rgba(232, 164, 184, 0.06);
+      border: none;
+      border-bottom: 1px solid transparent;
+      color: inherit;
+      font-family: inherit;
+      padding: 1.15rem 1.35rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    .job-header:hover { border-bottom-color: var(--border); }
+    .job-title {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      color: var(--cream);
+      margin: 0 0 0.35rem;
+    }
+    .job-meta { font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); }
+    .job-toggle {
+      color: var(--rose);
+      font-size: 1.2rem;
+      transition: transform 0.3s;
+      flex-shrink: 0;
+    }
+    .job-card.open .job-toggle { transform: rotate(180deg); }
+    .job-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+    .job-card.open .job-body { max-height: 520px; }
+    .job-body ul {
+      margin: 0;
+      padding: 0 1.35rem 1.35rem 2rem;
+      color: var(--text);
+      font-size: 0.98rem;
+      line-height: var(--line-body);
+    }
+    .job-body li { margin-bottom: 0.35rem; }
+
+    /* Projects */
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+    .project-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      padding: 0;
+      cursor: pointer;
+      text-align: left;
+      color: inherit;
+      font-family: inherit;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.25s, box-shadow 0.25s;
+      min-height: 200px;
+    }
+    .project-card::after {
+      content: "OPEN FILE ›";
+      position: absolute;
+      bottom: 1rem;
+      right: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.15em;
+      color: var(--rose);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .project-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--glow-rose);
+      border-color: var(--rose);
+    }
+    .project-card:hover::after { opacity: 1; }
+    .project-card .card-accent {
+      height: 3px;
+      background: linear-gradient(90deg, var(--rose), var(--gold));
+    }
+    .project-card.watermark .card-accent {
+      background: linear-gradient(90deg, var(--gold), var(--accent));
+    }
+    .project-card-inner { padding: 1.25rem; }
+    .project-icon {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .project-name {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      color: var(--cream);
+      margin: 0 0 0.5rem;
+    }
+    .project-teaser {
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.65;
+      margin: 0;
+    }
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 0.75rem;
+    }
+    .project-tags span {
+      font-size: 0.65rem;
+      padding: 0.2rem 0.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--muted);
+    }
+
+    /* Education */
+    .edu-grid {
+      display: grid;
+      gap: 1.25rem;
+    }
+    @media (min-width: 700px) {
+      .edu-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .edu-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      color: var(--rose);
+      margin: 0 0 0.45rem;
+    }
+    .edu-card .school { color: var(--muted); font-family: var(--font-mono); font-size: 0.82rem; margin-bottom: 0.85rem; }
+    .edu-card ul { margin: 0; padding-left: 1.2rem; font-size: 0.96rem; line-height: var(--line-body); }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+    .modal-backdrop.open {
+      opacity: 1;
+      visibility: visible;
+    }
+    .modal {
+      width: min(560px, 100%);
+      max-height: 85vh;
+      overflow-y: auto;
+      background: #1e141c;
+      border: 1px solid var(--rose);
+      box-shadow: var(--glow-rose), inset 0 0 60px rgba(232, 164, 184, 0.04);
+      padding: 1.85rem;
+      position: relative;
+      border-radius: 4px;
+    }
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      line-height: 1;
+      border-radius: 2px;
+    }
+    .modal-close:hover { box-shadow: var(--glow-gold); }
+    .modal h3 {
+      font-family: var(--font-display);
+      color: var(--cream);
+      margin: 0 0 1rem;
+      padding-right: 2rem;
+      font-size: 1.35rem;
+    }
+    .modal p, .modal ul { font-size: 0.98rem; line-height: var(--line-body); }
+    .modal a {
+      color: var(--rose);
+      word-break: break-all;
+    }
+    .modal-links { margin-top: 1.25rem; display: flex; gap: 0.75rem; flex-wrap: wrap; }
+
+    footer {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 2.75rem 1.5rem 3.5rem;
+      font-size: 0.95rem;
+      line-height: 1.75;
+      color: var(--text);
+      letter-spacing: 0.02em;
+      border-top: 1px solid var(--border);
+      margin-top: 2rem;
+      background: rgba(22, 16, 24, 0.9);
+    }
+    footer .footer-brand {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      color: var(--cream);
+      margin: 0 0 0.4rem;
+      letter-spacing: 0.06em;
+    }
+    footer .footer-meta {
+      margin: 0;
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+    }
+
+    /* About — personal */
+    .about-lead {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      color: var(--rose);
+      margin: 0 0 1.25rem;
+      line-height: 1.55;
+      max-width: var(--prose-width);
+    }
+    .about-body p {
+      margin: 0 0 1.15rem;
+      line-height: var(--line-body);
+      font-size: 1.02rem;
+      max-width: var(--prose-width);
+    }
+    .about-body p:last-child { margin-bottom: 0; }
+    .about-highlight {
+      color: var(--gold);
+      border-left: 3px solid var(--gold);
+      padding-left: 1.15rem;
+      margin-top: 1.5rem;
+      font-style: italic;
+      max-width: var(--prose-width);
+    }
+
+    /* Watermark feature zone */
+    #watermark {
+      scroll-margin-top: 5rem;
+    }
+    .watermark-zone {
+      position: relative;
+      padding: 2rem;
+      border: 1px solid rgba(232, 164, 184, 0.4);
+      background:
+        radial-gradient(ellipse 80% 50% at 50% 0%, rgba(232, 164, 184, 0.1), transparent),
+        radial-gradient(ellipse 60% 40% at 100% 100%, rgba(201, 168, 124, 0.08), transparent),
+        rgba(30, 22, 30, 0.94);
+      overflow: hidden;
+      border-radius: 4px;
+    }
+    .watermark-zone::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 48px,
+        rgba(232, 164, 184, 0.025) 48px,
+        rgba(232, 164, 184, 0.025) 49px
+      );
+      pointer-events: none;
+    }
+    .wm-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+    .wm-title-block h3 {
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 4vw, 2.25rem);
+      margin: 0;
+      color: var(--cream);
+    }
+    .wm-title-block .wm-sub {
+      color: var(--gold);
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.15em;
+      margin-top: 0.4rem;
+    }
+    .wm-status-pill {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      padding: 0.45rem 0.8rem;
+      border: 1px solid var(--rose);
+      color: var(--rose);
+      border-radius: 2px;
+      animation: wm-pulse 2.5s ease infinite;
+    }
+    @keyframes wm-pulse {
+      0%, 100% { box-shadow: 0 0 8px rgba(232, 164, 184, 0.3); }
+      50% { box-shadow: 0 0 20px rgba(232, 164, 184, 0.5); }
+    }
+    .wm-pitch {
+      position: relative;
+      z-index: 1;
+      font-size: 1rem;
+      line-height: var(--line-body);
+      max-width: var(--prose-width);
+      margin-bottom: 1.85rem;
+    }
+    .wm-pitch strong { color: var(--rose); }
+    .wm-pitch code {
+      font-family: var(--font-mono);
+      font-size: 0.88em;
+      background: rgba(232, 164, 184, 0.1);
+      padding: 0.1em 0.35em;
+      border-radius: 2px;
+    }
+
+    .wm-metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 1.75rem;
+      position: relative;
+      z-index: 1;
+    }
+    .wm-metric {
+      padding: 1rem;
+      border: 1px solid rgba(232, 164, 184, 0.25);
+      background: rgba(0, 0, 0, 0.25);
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: default;
+      border-radius: 2px;
+    }
+    .wm-metric:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--glow-rose);
+      border-color: var(--rose);
+    }
+    .wm-metric .val {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      color: var(--gold);
+      display: block;
+    }
+    .wm-metric .lbl {
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-top: 0.4rem;
+    }
+
+    .wm-split {
+      display: grid;
+      gap: 1.25rem;
+      position: relative;
+      z-index: 1;
+    }
+    @media (min-width: 800px) {
+      .wm-split { grid-template-columns: 1fr 1fr; }
+    }
+
+    .wm-terminal {
+      background: #100a0e;
+      border: 1px solid rgba(201, 168, 124, 0.45);
+      padding: 1.15rem;
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      line-height: 1.65;
+      color: var(--gold);
+      min-height: 220px;
+      box-shadow: inset 0 0 40px rgba(201, 168, 124, 0.05);
+      border-radius: 2px;
+    }
+    .wm-terminal .line { opacity: 0; animation: wm-fade-in 0.4s ease forwards; }
+    .wm-terminal .line:nth-child(1) { animation-delay: 0.1s; }
+    .wm-terminal .line:nth-child(2) { animation-delay: 0.25s; }
+    .wm-terminal .line:nth-child(3) { animation-delay: 0.4s; }
+    .wm-terminal .line:nth-child(4) { animation-delay: 0.55s; }
+    .wm-terminal .line:nth-child(5) { animation-delay: 0.7s; }
+    .wm-terminal .line:nth-child(6) { animation-delay: 0.85s; }
+    .wm-terminal .line:nth-child(7) { animation-delay: 1s; }
+    .wm-terminal .dim { color: var(--muted); }
+    .wm-terminal .hi { color: var(--rose); }
+    @keyframes wm-fade-in {
+      from { opacity: 0; transform: translateX(-8px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .wm-log h4 {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--accent);
+      margin: 0 0 1rem;
+      letter-spacing: 0.08em;
+    }
+    .wm-log-list { list-style: none; margin: 0; padding: 0; }
+    .wm-log-item {
+      display: flex;
+      gap: 0.75rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      font-size: 0.82rem;
+      line-height: 1.5;
+      transition: padding-left 0.2s, background 0.2s;
+      cursor: pointer;
+    }
+    .wm-log-item:hover {
+      padding-left: 0.5rem;
+      background: rgba(232, 164, 184, 0.06);
+    }
+    .wm-log-item .phase {
+      flex-shrink: 0;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+      min-width: 4.5rem;
+    }
+    .wm-log-item.active .phase { color: var(--rose); }
+
+    .wm-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 1.75rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .projects-subtitle {
+      font-size: 0.92rem;
+      color: var(--muted);
+      margin: -0.5rem 0 1.5rem;
+      letter-spacing: 0.04em;
+      max-width: var(--prose-width);
+      line-height: 1.65;
+    }
+
+    /* Panels without stamp (nested / compact) */
+    .panel.no-stamp::after { display: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .wm-status-pill { animation: none; }
+      .wm-terminal .line { opacity: 1; animation: none; }
+      .hero-name::before, .hero-name::after { animation: none; }
+      .hero-status .dot { animation: none; }
+      html { scroll-behavior: auto; }
+    }
+
+    @media (max-width: 600px) {
+      nav { flex-direction: column; gap: 0.5rem; }
+      .nav-links { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="grid-canvas" aria-hidden="true"></canvas>
+  <svg class="taurus-bg" viewBox="0 0 320 200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <!-- Taurus — star positions based on the Hyades V, horns, and body -->
+    <g class="lines">
+      <line x1="228" y1="28" x2="178" y2="52" /><!-- Elnath → ζ Tau -->
+      <line x1="178" y1="52" x2="118" y2="78" /><!-- ζ Tau → Aldebaran -->
+      <line x1="118" y1="78" x2="138" y2="118" /><!-- Aldebaran → θ Tau -->
+      <line x1="58" y1="88" x2="82" y2="98" /><!-- λ Tau → γ Tau -->
+      <line x1="82" y1="98" x2="102" y2="108" /><!-- γ Tau → δ Tau -->
+      <line x1="102" y1="108" x2="128" y2="92" /><!-- δ Tau → ε Tau -->
+      <line x1="128" y1="92" x2="118" y2="78" /><!-- ε Tau → Aldebaran -->
+      <line x1="82" y1="98" x2="118" y2="78" /><!-- γ Tau → Aldebaran -->
+    </g>
+    <g class="stars">
+      <circle class="star-bright" cx="118" cy="78" r="2.8" /><!-- Aldebaran (α) -->
+      <circle class="star-bright" cx="228" cy="28" r="2.2" /><!-- Elnath (β) -->
+      <circle class="star" cx="178" cy="52" r="1.4" /><!-- ζ Tau -->
+      <circle class="star" cx="58" cy="88" r="1.1" /><!-- λ Tau -->
+      <circle class="star" cx="82" cy="98" r="1.2" /><!-- γ Tau -->
+      <circle class="star" cx="102" cy="108" r="1.1" /><!-- δ Tau -->
+      <circle class="star" cx="128" cy="92" r="1.2" /><!-- ε Tau -->
+      <circle class="star-dim" cx="138" cy="118" r="1" /><!-- θ Tau -->
+      <circle class="star-dim" cx="48" cy="72" r="0.9" /><!-- ο Tau -->
+    </g>
+    <g class="pleiades"><!-- Pleiades cluster (associated with Taurus) -->
+      <circle class="star" cx="268" cy="18" r="0.7" />
+      <circle class="star" cx="276" cy="24" r="0.6" />
+      <circle class="star" cx="272" cy="32" r="0.65" />
+      <circle class="star" cx="282" cy="14" r="0.55" />
+      <circle class="star" cx="286" cy="28" r="0.5" />
+      <circle class="star" cx="264" cy="30" r="0.55" />
+    </g>
+  </svg>
+  <div class="scanlines" aria-hidden="true"></div>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <div id="boot" role="dialog" aria-label="Case file opening sequence">
+    <button type="button" class="boot-skip" id="boot-skip">SKIP INTRO [ESC]</button>
+    <div class="boot-inner" id="boot-text"></div>
+  </div>
+
+  <nav>
+    <a href="#top" class="nav-logo">Case File · JN</a>
+    <ul class="nav-links">
+      <li><a href="#about">ABOUT</a></li>
+      <li><a href="#watermark">WATERMARK</a></li>
+      <li><a href="#certs">CLEARANCE</a></li>
+      <li><a href="#skills">EVIDENCE</a></li>
+      <li><a href="#experience">FIELD LOG</a></li>
+      <li><a href="#projects">LABS</a></li>
+      <li><a href="#education">CREDENTIALS</a></li>
+      <li><a href="#contact">CONTACT</a></li>
+    </ul>
+  </nav>
+
+  <main id="top">
+    <header class="hero">
+      <div class="hero-status"><span class="dot"></span> CASE OPEN · SECURITY+ · IAT II</div>
+      <div class="glitch-wrap">
+        <h1 class="hero-name" data-text="JANINA (NINA)">JANINA (NINA)</h1>
+      </div>
+      <p class="hero-role" id="typewriter"></p>
+      <div class="hero-meta">
+        <a class="chip-link" href="mailto:janinavallon@gmail.com">✉ janinavallon@gmail.com</a>
+        <span class="chip-link">📍 Remote</span>
+      </div>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#watermark">WATERMARK ↓</a>
+        <a class="btn btn-ghost" href="#projects">MORE LABS</a>
+        <a class="btn btn-ghost" href="https://www.linkedin.com/in/janina-v-261210309/" target="_blank" rel="noopener">LINKEDIN ↗</a>
+      </div>
+    </header>
+
+    <section id="about">
+      <p class="section-label">Case File 01 · Subject Profile</p>
+      <h2 class="section-title">About Me</h2>
+      <div class="panel about-body">
+        <p class="about-lead">
+          Hi, I'm Janina (Nina), a technology enthusiast, writer, and lifelong learner with a passion for building a meaningful life and creating solutions that make a positive impact.
+        </p>
+        <p>
+          My interests span Linux, cloud computing, cybersecurity, automation, artificial intelligence, and emerging technologies. I enjoy hands-on learning and building projects that deepen my understanding of systems, infrastructure, networking, and security. I'm especially interested in how technology can be used to solve real-world challenges and help people and organizations make better decisions.
+        </p>
+        <p>
+          Beyond technology, I'm deeply passionate about writing, reading, storytelling, personal development, spirituality, fashion, lifestyle, wellness, and creativity. I enjoy exploring ideas that help people live with greater purpose, self-awareness, and intention. Whether through books, meaningful conversations, travel, reflection, or creative expression, I'm constantly seeking opportunities to learn, grow, and better understand both the world and myself.
+        </p>
+        <p>
+          I believe that some of life's most important questions exist at the intersection of science, technology, philosophy, and spirituality. I'm fascinated by human potential, personal transformation, and the ways in which knowledge, wisdom, and innovation can be used to create a more fulfilling and impactful life.
+        </p>
+        <p>
+          One of my long-term goals is to build technology that contributes to a better future, particularly in areas related to environmental sustainability, resource awareness, and accountability. I'm fascinated by the intersection of innovation, human potential, and the responsibility we all share in shaping the world around us.
+        </p>
+        <p>
+          This GitHub is a collection of my learning journey, experiments, projects, and ideas as I continue to grow as a technologist, writer, creator, and lifelong student of life.
+        </p>
+        <p class="about-highlight">
+          Thanks for stopping by—I'm glad you're here.
+        </p>
+      </div>
+    </section>
+
+    <section id="watermark">
+      <p class="section-label">Case File 02 · Active Investigation</p>
+      <h2 class="section-title">What I’m Building Now</h2>
+      <div class="watermark-zone">
+        <div class="wm-header">
+          <div class="wm-title-block">
+            <h3>WATERMARK METER</h3>
+            <p class="wm-sub">OPEN SOURCE · METHODOLOGY-FIRST · v0.1</p>
+          </div>
+          <span class="wm-status-pill">● ACTIVE DEVELOPMENT</span>
+        </div>
+
+        <p class="wm-pitch">
+          <strong>Watermark</strong> is my current focus — an open-source CLI that measures the real energy, carbon, and water footprint of AI workloads. Not a guess from <code>cpu_percent</code>, but hardware reads where possible (RAPL, NVML), regional grid data where we must model, and <strong>every number tagged</strong> so reviewers can audit or challenge any assumption. Each run ships <code>measurements.csv</code>, <code>summary.json</code>, and interactive HTML dashboards — plus a portfolio view to compare the same workload across regions.
+        </p>
+
+        <div class="wm-metrics" aria-label="What Watermark measures">
+          <div class="wm-metric" title="Intel/AMD RAPL + NVIDIA NVML">
+            <span class="val">⚡ ENERGY</span>
+            <span class="lbl">RAPL · NVML · GPU</span>
+          </div>
+          <div class="wm-metric" title="EPA eGRID + IEA regional profiles">
+            <span class="val">🌫 CO₂e</span>
+            <span class="lbl">GRID CARBON</span>
+          </div>
+          <div class="wm-metric" title="WUE + generation water">
+            <span class="val">💧 H₂O</span>
+            <span class="lbl">DIRECT + INDIRECT</span>
+          </div>
+          <div class="wm-metric" title="WRI Aqueduct weighting">
+            <span class="val">◎ STRESS</span>
+            <span class="lbl">WATERSHED</span>
+          </div>
+          <div class="wm-metric" title="Measured vs modeled tags">
+            <span class="val">⌗ AUDIT</span>
+            <span class="lbl">SOURCE TAGS</span>
+          </div>
+        </div>
+
+        <div class="wm-split">
+          <div class="wm-terminal" aria-label="Example Watermark command output">
+            <div class="line"><span class="dim">$</span> watermark --duration 60 --region us-east-1 --output ./run1</div>
+            <div class="line"><span class="dim">[rapl_measured]</span> CPU package energy <span class="hi">integrated</span></div>
+            <div class="line"><span class="dim">[nvml_pynvml]</span> GPU board power <span class="hi">sampled</span></div>
+            <div class="line"><span class="dim">[pue_multiplier]</span> facility_kwh = it_kwh × 1.58</div>
+            <div class="line"><span class="dim">[modeled_annual_average]</span> co2e_kg → <span class="hi">tagged</span></div>
+            <div class="line">→ measurements.csv · summary.json · dashboard.html</div>
+            <div class="line"><span class="hi">✓</span> reproducible footprint report ready</div>
+          </div>
+
+          <div class="wm-log panel no-stamp" style="background: rgba(0,0,0,0.25); border: 1px solid rgba(201,168,124,0.3);">
+            <h4>FIELD NOTES — RECENT WORK</h4>
+            <ul class="wm-log-list" id="wm-log-list">
+              <li class="wm-log-item active" data-detail="Core metering engine: per-sample CSV, monotonic clock integration, RAPL wrap-around handling, multi-GPU NVML fallback via nvidia-smi.">
+                <span class="phase">CORE</span>
+                <span>Built the metering engine with hardware-first reads and honest fallbacks when RAPL isn’t available.</span>
+              </li>
+              <li class="wm-log-item" data-detail="Carbon, water, PUE, WUE, embodied preview (--hardware-sku), and WRI Aqueduct stress — each output line carries a source tag.">
+                <span class="phase">MODEL</span>
+                <span>Documented methodology (METHODOLOGY.md) so every modeled constant is challengeable.</span>
+              </li>
+              <li class="wm-log-item" data-detail="Auto-generated dashboard.html per run; portfolio.html scans summary.json trees for cross-region comparison.">
+                <span class="phase">VIZ</span>
+                <span>Shipped interactive dashboards and portfolio aggregation for benchmark-style comparisons.</span>
+              </li>
+              <li class="wm-log-item" data-detail="RunPod pod_setup.sh, workload wrappers, text/image/code/embeddings generators for repeatable experiments.">
+                <span class="phase">GPU</span>
+                <span>Tested on cloud GPU pods — wrapping real AI workloads, not synthetic loops.</span>
+              </li>
+              <li class="wm-log-item" data-detail="test_dashboard.py + test_portfolio.py — 44 tests guarding math and HTML output behavior.">
+                <span class="phase">QA</span>
+                <span>Added pytest coverage for dashboard and portfolio behavior before publishing numbers.</span>
+              </li>
+            </ul>
+            <p id="wm-log-detail" style="margin: 1rem 0 0; font-size: 0.82rem; color: var(--rose); min-height: 3em; line-height: 1.6;"></p>
+          </div>
+        </div>
+
+        <div class="wm-actions">
+          <a class="btn btn-primary" href="https://github.com/JaninaZV/Watermark" target="_blank" rel="noopener">VIEW ON GITHUB ↗</a>
+          <a class="btn btn-ghost" href="https://github.com/JaninaZV/Watermark/blob/master/METHODOLOGY.md" target="_blank" rel="noopener">READ METHODOLOGY</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="certs">
+      <p class="section-label">Case File 03 · Clearance Records</p>
+      <h2 class="section-title">Certifications</h2>
+      <div class="cert-grid">
+        <div class="panel cert-card no-stamp">
+          <span class="cert-badge">ACTIVE</span>
+          <h3>CompTIA Security+</h3>
+          <p>DoD 8570/8140 compliant — validated knowledge in security, risk management, and enterprise/cloud security practices (IAT Level II).</p>
+        </div>
+        <div class="panel cert-card no-stamp">
+          <span class="cert-badge">IN PROGRESS</span>
+          <h3>RHCSA</h3>
+          <p>Red Hat Certified System Administrator — deepening RHEL administration, automation, and production Linux operations.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="skills">
+      <p class="section-label">Case File 04 · Evidence Index</p>
+      <h2 class="section-title">Skill Matrix</h2>
+      <div class="skill-grid" id="skill-grid"></div>
+    </section>
+
+    <section id="experience">
+      <p class="section-label">Case File 05 · Field Operations</p>
+      <h2 class="section-title">Experience Log</h2>
+      <div class="timeline">
+        <article class="job-card open">
+          <button type="button" class="job-header" aria-expanded="true">
+            <div>
+              <h3 class="job-title">Technical Support Engineer (Tier 1) — Axon Fusus</h3>
+              <p class="job-meta">Contract · Hybrid · Nov 2025 – Present</p>
+            </div>
+            <span class="job-toggle" aria-hidden="true">▼</span>
+          </button>
+          <div class="job-body">
+            <ul>
+              <li>Support secure, high-availability infrastructure in regulated law enforcement environments.</li>
+              <li>Resolve Tier 1 VPN, firewall, and DNS incidents to sustain uptime for mission-critical systems.</li>
+              <li>Administer Linux VMS and triage network issues across IP cameras, switches, and edge infrastructure.</li>
+              <li>Analyze system logs, packet captures, and configuration data to accelerate root-cause analysis and reduce MTTR.</li>
+              <li>Support third-party system integrations with internal teams and external partners.</li>
+            </ul>
+          </div>
+        </article>
+        <article class="job-card">
+          <button type="button" class="job-header" aria-expanded="false">
+            <div>
+              <h3 class="job-title">Cybersecurity Fellow — The Knowledge House</h3>
+              <p class="job-meta">Apprenticeship · Atlanta, GA · Nov 2024 – Nov 2025</p>
+            </div>
+            <span class="job-toggle" aria-hidden="true">▼</span>
+          </button>
+          <div class="job-body">
+            <ul>
+              <li>Completed 400+ hours of hands-on cybersecurity training focused on enterprise defense, monitoring, and cloud security operations.</li>
+              <li>Built and managed Linux VMs and labs for network hardening, system administration, and incident response.</li>
+              <li>Performed threat detection and response simulations using SIEM tools, log analysis, and MITRE ATT&CK.</li>
+              <li>Secured AWS environments with GuardDuty, Security Hub, and IAM; remediated vulnerabilities and enforced compliance.</li>
+              <li>Documented security incidents and remediation actions for stakeholders and compliance review.</li>
+            </ul>
+          </div>
+        </article>
+        <article class="job-card">
+          <button type="button" class="job-header" aria-expanded="false">
+            <div>
+              <h3 class="job-title">Technical Educator (IT & Systems Support) — Bloomberg School District</h3>
+              <p class="job-meta">New Castle, DE · Jan 2024 – Dec 2024</p>
+            </div>
+            <span class="job-toggle" aria-hidden="true">▼</span>
+          </button>
+          <div class="job-body">
+            <ul>
+              <li>Implemented and supported assistive and educational technology systems, improving accessibility across diverse environments.</li>
+              <li>Designed and deployed technology-driven solutions (15+ IEP-based plans), increasing student performance by 25%.</li>
+              <li>Trained staff on software tools, system usage, and technical workflows.</li>
+              <li>Collaborated with cross-functional teams to manage technology initiatives across multiple classrooms.</li>
+              <li>Troubleshot and resolved hardware, software, and user-level technical issues.</li>
+            </ul>
+          </div>
+        </article>
+        <article class="job-card">
+          <button type="button" class="job-header" aria-expanded="false">
+            <div>
+              <h3 class="job-title">IT Help Desk Specialist — Discover Inc.</h3>
+              <p class="job-meta">Remote · Nov 2020 – Dec 2023</p>
+            </div>
+            <span class="job-toggle" aria-hidden="true">▼</span>
+          </button>
+          <div class="job-body">
+            <ul>
+              <li>Troubleshot hardware, software, VPN, and RDP issues across 50+ endpoints monthly, reducing downtime.</li>
+              <li>Supported network connectivity and IP-based devices for reliable access to systems and internal resources.</li>
+              <li>Supported remote system access and secure connectivity configurations across distributed environments.</li>
+              <li>Administered Active Directory user accounts and access controls with role-based permissions and security policies.</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="projects">
+      <p class="section-label">Case File 06 · Lab Archives</p>
+      <h2 class="section-title">Fellowship & Lab Work</h2>
+      <p class="projects-subtitle">Hands-on projects from cybersecurity training — before Watermark became the main build.</p>
+      <div class="project-grid">
+        <button type="button" class="project-card" data-project="aws">
+          <div class="card-accent"></div>
+          <div class="project-card-inner">
+            <div class="project-icon">☁️</div>
+            <h3 class="project-name">AWS Practice Labs</h3>
+            <p class="project-teaser">EC2, IAM, GuardDuty, Security Hub & cloud security ops.</p>
+            <div class="project-tags">
+              <span>AWS</span><span>GuardDuty</span><span>IAM</span>
+            </div>
+          </div>
+        </button>
+        <button type="button" class="project-card" data-project="cyber">
+          <div class="card-accent"></div>
+          <div class="project-card-inner">
+            <div class="project-icon">🛡️</div>
+            <h3 class="project-name">Cybersecurity Lab</h3>
+            <p class="project-teaser">Wireshark, pfSense, Linux hardening, IDS & SIEM simulations.</p>
+            <div class="project-tags">
+              <span>Wireshark</span><span>pfSense</span><span>SIEM</span>
+            </div>
+          </div>
+        </button>
+      </div>
+    </section>
+
+    <section id="education">
+      <p class="section-label">Case File 07 · Academic Record</p>
+      <h2 class="section-title">Education</h2>
+      <div class="edu-grid">
+        <div class="panel edu-card">
+          <h3>Innovation Fellowship — Cybersecurity Track</h3>
+          <p class="school">The Knowledge House · 12-month program</p>
+          <ul>
+            <li>Cybersecurity, networking, cloud computing, and hands-on labs with Linux, AWS, Python, and SIEM tools.</li>
+          </ul>
+        </div>
+        <div class="panel edu-card">
+          <h3>B.S. in General Biology</h3>
+          <p class="school">Pennsylvania State University · State College, PA</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <p class="section-label">Case File 08 · Establish Contact</p>
+      <h2 class="section-title">Get In Touch</h2>
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="mailto:janinavallon@gmail.com">SEND EMAIL</a>
+        <a class="btn btn-ghost" href="https://www.linkedin.com/in/janina-v-261210309/" target="_blank" rel="noopener">LINKEDIN</a>
+        <a class="btn btn-ghost" href="https://github.com/JaninaZV" target="_blank" rel="noopener">GITHUB</a>
+        <a class="btn btn-ghost" href="Janina%20Vallon_SysAdmin_Resume.pdf" target="_blank" rel="noopener">RESUME PDF ↗</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p class="footer-brand">Janina (Nina)</p>
+    <p class="footer-meta">Investigation dossier · <span id="year"></span></p>
+  </footer>
+
+  <div class="modal-backdrop" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
+    <div class="modal">
+      <button type="button" class="modal-close" id="modal-close" aria-label="Close">×</button>
+      <h3 id="modal-title"></h3>
+      <div id="modal-body"></div>
+      <div class="modal-links" id="modal-links"></div>
+    </div>
+  </div>
+
+  <script>
+    const SKILLS = [
+      { name: "RHEL", tier: "core" },
+      { name: "Ubuntu", tier: "core" },
+      { name: "CentOS", tier: "core" },
+      { name: "Windows Server", tier: "core" },
+      { name: "Active Directory", tier: "core" },
+      { name: "TCP/IP", tier: "sec" },
+      { name: "DNS / DHCP", tier: "sec" },
+      { name: "VPN", tier: "sec" },
+      { name: "Wireshark", tier: "sec" },
+      { name: "Nmap", tier: "sec" },
+      { name: "Python", tier: "core" },
+      { name: "Bash", tier: "core" },
+      { name: "PowerShell", tier: "core" },
+      { name: "REST APIs", tier: "cloud" },
+      { name: "Postman", tier: "cloud" },
+      { name: "AWS", tier: "cloud" },
+      { name: "Azure", tier: "cloud" },
+      { name: "Docker", tier: "cloud" },
+      { name: "Ansible", tier: "cloud" },
+      { name: "VMware", tier: "cloud" },
+      { name: "Nessus", tier: "sec" },
+      { name: "GuardDuty", tier: "sec" },
+      { name: "SIEM", tier: "sec" },
+      { name: "RTSP / ONVIF", tier: "sec" },
+      { name: "Cloud VMS", tier: "sec" },
+    ];
+
+    const PROJECTS = {
+      cyber: {
+        title: "Cybersecurity Lab",
+        body: `<p>Built hands-on labs with tools like <strong>Wireshark</strong> and <strong>pfSense</strong>, including Linux hardening, intrusion detection, and SIEM simulations.</p>
+          <ul><li>Network traffic analysis & packet inspection</li><li>Firewall rules & perimeter defense</li><li>Linux hardening & intrusion detection workflows</li></ul>`,
+        links: [],
+      },
+      aws: {
+        title: "AWS Practice Labs",
+        body: `<p>Used <strong>AWS</strong> for launching EC2 instances, configuring IAM, and simulating real-world cloud environments for security analysis — including GuardDuty, Security Hub, and compliance workflows from fellowship labs.</p>
+          <ul><li>EC2 provisioning & security groups</li><li>IAM policies & least-privilege practice</li><li>Vulnerability detection & remediation in cloud security ops</li></ul>`,
+        links: [],
+      },
+      watermark: {
+        title: "Watermark Meter",
+        body: `<p><strong>Watermark</strong> is an open-source CLI that measures the true energy, carbon, and water cost of AI workloads — with every assumption auditable.</p>
+          <ul>
+            <li>Reads CPU energy from RAPL and GPU power from NVML when available</li>
+            <li>Regional grid carbon, PUE, WUE, and watershed stress modeling</li>
+            <li>Outputs <code>measurements.csv</code>, <code>summary.json</code>, and interactive HTML dashboards</li>
+            <li>Portfolio view for comparing runs across regions</li>
+          </ul>`,
+        links: [
+          { label: "GitHub Repo", href: "https://github.com/JaninaZV/Watermark" },
+        ],
+      },
+    };
+
+    const BOOT_LINES = [
+      "OPENING CASE FILE #JN-2026...",
+      "SUBJECT: JANINA (NINA)",
+      "VERIFYING CLEARANCE............ OK",
+      "INDEXING EVIDENCE: WATERMARK · SKILLS · OPS",
+      "STATUS: ACTIVE INVESTIGATION",
+      "WELCOME, REVIEWER.",
+    ];
+
+    // Skills render
+    const skillGrid = document.getElementById("skill-grid");
+    SKILLS.forEach((s) => {
+      const el = document.createElement("span");
+      el.className = "skill-tag";
+      el.dataset.tier = s.tier;
+      el.textContent = s.name;
+      el.title = s.tier === "sec" ? "Security / networking" : s.tier === "cloud" ? "Cloud & integration" : "Core stack";
+      skillGrid.appendChild(el);
+    });
+
+    // Typewriter
+    const roles = [
+      "Building Watermark — AI footprint metering",
+      "Systems Engineer · Enterprise infrastructure",
+      "Security+ · RHEL · AWS · VMS",
+    ];
+    const tw = document.getElementById("typewriter");
+    let ri = 0, ci = 0, deleting = false;
+    function typeTick() {
+      const current = roles[ri];
+      if (!deleting) {
+        tw.textContent = current.slice(0, ++ci);
+        if (ci === current.length) {
+          deleting = true;
+          setTimeout(typeTick, 2200);
+          return;
+        }
+      } else {
+        tw.textContent = current.slice(0, --ci);
+        if (ci === 0) {
+          deleting = false;
+          ri = (ri + 1) % roles.length;
+        }
+      }
+      setTimeout(typeTick, deleting ? 40 : 70);
+    }
+    typeTick();
+
+    // Boot sequence
+    const bootEl = document.getElementById("boot");
+    const bootText = document.getElementById("boot-text");
+    let bootLine = 0;
+    function showBoot() {
+      if (bootLine >= BOOT_LINES.length) {
+        endBoot();
+        return;
+      }
+      const line = document.createElement("div");
+      line.textContent = "> " + BOOT_LINES[bootLine];
+      bootText.appendChild(line);
+      bootLine++;
+      setTimeout(showBoot, 380);
+    }
+    function endBoot() {
+      bootEl.classList.add("hidden");
+      bootEl.setAttribute("aria-hidden", "true");
+    }
+    document.getElementById("boot-skip").addEventListener("click", endBoot);
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !bootEl.classList.contains("hidden")) endBoot();
+    });
+    showBoot();
+
+    // Watermark build log
+    const wmLogItems = document.querySelectorAll(".wm-log-item");
+    const wmLogDetail = document.getElementById("wm-log-detail");
+    if (wmLogItems.length && wmLogDetail) {
+      wmLogDetail.textContent = wmLogItems[0].dataset.detail || "";
+      wmLogItems.forEach((item) => {
+        item.addEventListener("click", () => {
+          wmLogItems.forEach((i) => i.classList.remove("active"));
+          item.classList.add("active");
+          wmLogDetail.textContent = item.dataset.detail || "";
+        });
+      });
+    }
+
+    // Job accordions
+    document.querySelectorAll(".job-card .job-header").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const card = btn.closest(".job-card");
+        const open = card.classList.toggle("open");
+        btn.setAttribute("aria-expanded", open);
+      });
+    });
+
+    // Modal
+    const modal = document.getElementById("modal");
+    const modalTitle = document.getElementById("modal-title");
+    const modalBody = document.getElementById("modal-body");
+    const modalLinks = document.getElementById("modal-links");
+
+    function openModal(key) {
+      const p = PROJECTS[key];
+      if (!p) return;
+      modalTitle.textContent = p.title;
+      modalBody.innerHTML = p.body;
+      modalLinks.innerHTML = "";
+      p.links.forEach((l) => {
+        const a = document.createElement("a");
+        a.className = "btn btn-primary";
+        a.href = l.href;
+        a.target = "_blank";
+        a.rel = "noopener";
+        a.textContent = l.label + " ↗";
+        modalLinks.appendChild(a);
+      });
+      modal.hidden = false;
+      modal.classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+    function closeModal() {
+      modal.classList.remove("open");
+      modal.hidden = true;
+      document.body.style.overflow = "";
+    }
+    document.querySelectorAll(".project-card").forEach((card) => {
+      card.addEventListener("click", () => openModal(card.dataset.project));
+    });
+    document.getElementById("modal-close").addEventListener("click", closeModal);
+    modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && modal.classList.contains("open")) closeModal();
+    });
+
+    // Nav active on scroll
+    const sections = document.querySelectorAll("section[id], header.hero");
+    const navLinks = document.querySelectorAll(".nav-links a");
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const id = entry.target.id || "top";
+            navLinks.forEach((a) => {
+              a.classList.toggle("active", a.getAttribute("href") === "#" + id);
+            });
+          }
+        });
+      },
+      { rootMargin: "-40% 0px -50% 0px", threshold: 0 }
+    );
+    sections.forEach((s) => obs.observe(s));
+
+    // Canvas grid + particles
+    const canvas = document.getElementById("grid-canvas");
+    const ctx = canvas.getContext("2d");
+    let w, h, particles;
+    function resize() {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+      particles = Array.from({ length: Math.min(80, Math.floor(w * h / 15000)) }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+      }));
+    }
+    function draw() {
+      ctx.fillStyle = "rgba(22, 16, 24, 0.22)";
+      ctx.fillRect(0, 0, w, h);
+      const step = 48;
+      ctx.strokeStyle = "rgba(232, 164, 184, 0.05)";
+      ctx.lineWidth = 1;
+      for (let x = 0; x < w; x += step) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, h);
+        ctx.stroke();
+      }
+      for (let y = 0; y < h; y += step) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(w, y);
+        ctx.stroke();
+      }
+      particles.forEach((p, i) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0 || p.x > w) p.vx *= -1;
+        if (p.y < 0 || p.y > h) p.vy *= -1;
+        ctx.fillStyle = "rgba(232, 164, 184, 0.45)";
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 1.2, 0, Math.PI * 2);
+        ctx.fill();
+        for (let j = i + 1; j < particles.length; j++) {
+          const q = particles[j];
+          const dx = p.x - q.x, dy = p.y - q.y;
+          const dist = Math.hypot(dx, dy);
+          if (dist < 120) {
+            ctx.strokeStyle = `rgba(201, 168, 124, ${0.12 * (1 - dist / 120)})`;
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(q.x, q.y);
+            ctx.stroke();
+          }
+        }
+      });
+      requestAnimationFrame(draw);
+    }
+    resize();
+    window.addEventListener("resize", resize);
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      requestAnimationFrame(draw);
+    } else {
+      ctx.fillStyle = "#161018";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
