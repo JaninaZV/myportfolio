@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="Janina (Nina) — technologist, writer, and builder exploring Linux, cybersecurity, AI, and sustainable innovation." />
-  <title>Janina (Nina) | Case File</title>
+  <title>Janina (Nina) | Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400&display=swap" rel="stylesheet" />
@@ -25,7 +25,6 @@
       --evidence: #d4a574;
       --glow-rose: 0 0 24px rgba(232, 121, 166, 0.35), 0 0 48px rgba(232, 121, 166, 0.12);
       --glow-gold: 0 0 20px rgba(201, 168, 124, 0.35);
-      /* legacy aliases for minimal JS/canvas churn */
       --cyan: var(--rose);
       --magenta: var(--accent);
       --lime: var(--gold);
@@ -57,7 +56,6 @@
       pointer-events: none;
     }
 
-    /* Taurus constellation — subtle background accent */
     .taurus-bg {
       position: fixed;
       top: 6%;
@@ -119,7 +117,6 @@
       background: radial-gradient(ellipse at center, transparent 45%, rgba(22, 16, 24, 0.65) 100%);
     }
 
-    /* Case file watermark overlay */
     body::before {
       content: "";
       position: fixed;
@@ -131,7 +128,6 @@
       background-size: 180px 180px;
     }
 
-    /* Boot — case file opening */
     #boot {
       position: fixed;
       inset: 0;
@@ -251,10 +247,6 @@
       color: var(--accent);
       margin-bottom: 0.6rem;
       text-transform: uppercase;
-    }
-    .section-label::before {
-      content: "🔍 ";
-      font-size: 0.85em;
     }
     .section-title {
       font-family: var(--font-display);
@@ -417,7 +409,6 @@
       transform: scale(1.02);
     }
 
-    /* Panels — case file folders */
     .panel {
       background: var(--bg-panel);
       border: 1px solid var(--border);
@@ -436,22 +427,6 @@
       background: linear-gradient(180deg, var(--rose), var(--gold));
       border-radius: 2px 0 0 6px;
     }
-    .panel::after {
-      content: "CONFIDENTIAL";
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      font-family: var(--font-mono);
-      font-size: 0.55rem;
-      letter-spacing: 0.25em;
-      color: var(--wine);
-      border: 1px solid rgba(158, 61, 92, 0.45);
-      padding: 0.2rem 0.45rem;
-      opacity: 0.55;
-      transform: rotate(-4deg);
-      pointer-events: none;
-    }
-
     /* Skills */
     .skill-grid {
       display: flex;
@@ -601,7 +576,7 @@
       min-height: 200px;
     }
     .project-card::after {
-      content: "OPEN FILE ›";
+      content: "DETAILS ›";
       position: absolute;
       bottom: 1rem;
       right: 1rem;
@@ -783,7 +758,6 @@
       max-width: var(--prose-width);
     }
 
-    /* Watermark feature zone */
     #watermark {
       scroll-margin-top: 5rem;
     }
@@ -820,6 +794,28 @@
       margin-bottom: 1.5rem;
       position: relative;
       z-index: 1;
+    }
+    .wm-wordmark {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 600;
+      margin: 0;
+      letter-spacing: 0.04em;
+      line-height: 1.1;
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+    .wm-wordmark .wm-water {
+      color: #fff;
+    }
+    .wm-wordmark a.wm-mark {
+      color: #5eb8ff;
+      text-decoration: none;
+    }
+    .wm-wordmark a.wm-mark:hover {
+      color: #8ecfff;
+      text-decoration: underline;
     }
     .wm-title-block h3 {
       font-family: var(--font-display);
@@ -988,9 +984,6 @@
       line-height: 1.65;
     }
 
-    /* Panels without stamp (nested / compact) */
-    .panel.no-stamp::after { display: none; }
-
     @media (prefers-reduced-motion: reduce) {
       .wm-status-pill { animation: none; }
       .wm-terminal .line { opacity: 1; animation: none; }
@@ -1008,29 +1001,28 @@
 <body>
   <canvas id="grid-canvas" aria-hidden="true"></canvas>
   <svg class="taurus-bg" viewBox="0 0 320 200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-    <!-- Taurus — star positions based on the Hyades V, horns, and body -->
     <g class="lines">
-      <line x1="228" y1="28" x2="178" y2="52" /><!-- Elnath → ζ Tau -->
-      <line x1="178" y1="52" x2="118" y2="78" /><!-- ζ Tau → Aldebaran -->
-      <line x1="118" y1="78" x2="138" y2="118" /><!-- Aldebaran → θ Tau -->
-      <line x1="58" y1="88" x2="82" y2="98" /><!-- λ Tau → γ Tau -->
-      <line x1="82" y1="98" x2="102" y2="108" /><!-- γ Tau → δ Tau -->
-      <line x1="102" y1="108" x2="128" y2="92" /><!-- δ Tau → ε Tau -->
-      <line x1="128" y1="92" x2="118" y2="78" /><!-- ε Tau → Aldebaran -->
-      <line x1="82" y1="98" x2="118" y2="78" /><!-- γ Tau → Aldebaran -->
+      <line x1="228" y1="28" x2="178" y2="52" />
+      <line x1="178" y1="52" x2="118" y2="78" />
+      <line x1="118" y1="78" x2="138" y2="118" />
+      <line x1="58" y1="88" x2="82" y2="98" />
+      <line x1="82" y1="98" x2="102" y2="108" />
+      <line x1="102" y1="108" x2="128" y2="92" />
+      <line x1="128" y1="92" x2="118" y2="78" />
+      <line x1="82" y1="98" x2="118" y2="78" />
     </g>
     <g class="stars">
-      <circle class="star-bright" cx="118" cy="78" r="2.8" /><!-- Aldebaran (α) -->
-      <circle class="star-bright" cx="228" cy="28" r="2.2" /><!-- Elnath (β) -->
-      <circle class="star" cx="178" cy="52" r="1.4" /><!-- ζ Tau -->
-      <circle class="star" cx="58" cy="88" r="1.1" /><!-- λ Tau -->
-      <circle class="star" cx="82" cy="98" r="1.2" /><!-- γ Tau -->
-      <circle class="star" cx="102" cy="108" r="1.1" /><!-- δ Tau -->
-      <circle class="star" cx="128" cy="92" r="1.2" /><!-- ε Tau -->
-      <circle class="star-dim" cx="138" cy="118" r="1" /><!-- θ Tau -->
-      <circle class="star-dim" cx="48" cy="72" r="0.9" /><!-- ο Tau -->
+      <circle class="star-bright" cx="118" cy="78" r="2.8" />
+      <circle class="star-bright" cx="228" cy="28" r="2.2" />
+      <circle class="star" cx="178" cy="52" r="1.4" />
+      <circle class="star" cx="58" cy="88" r="1.1" />
+      <circle class="star" cx="82" cy="98" r="1.2" />
+      <circle class="star" cx="102" cy="108" r="1.1" />
+      <circle class="star" cx="128" cy="92" r="1.2" />
+      <circle class="star-dim" cx="138" cy="118" r="1" />
+      <circle class="star-dim" cx="48" cy="72" r="0.9" />
     </g>
-    <g class="pleiades"><!-- Pleiades cluster (associated with Taurus) -->
+    <g class="pleiades">
       <circle class="star" cx="268" cy="18" r="0.7" />
       <circle class="star" cx="276" cy="24" r="0.6" />
       <circle class="star" cx="272" cy="32" r="0.65" />
@@ -1042,28 +1034,28 @@
   <div class="scanlines" aria-hidden="true"></div>
   <div class="vignette" aria-hidden="true"></div>
 
-  <div id="boot" role="dialog" aria-label="Case file opening sequence">
-    <button type="button" class="boot-skip" id="boot-skip">SKIP INTRO [ESC]</button>
+  <div id="boot" role="dialog" aria-label="Loading introduction">
+    <button type="button" class="boot-skip" id="boot-skip">SKIP [ESC]</button>
     <div class="boot-inner" id="boot-text"></div>
   </div>
 
   <nav>
-    <a href="#top" class="nav-logo">Case File · JN</a>
+    <a href="#top" class="nav-logo">Janina (Nina)</a>
     <ul class="nav-links">
       <li><a href="#about">ABOUT</a></li>
-      <li><a href="#watermark">WATERMARK</a></li>
-      <li><a href="#certs">CLEARANCE</a></li>
-      <li><a href="#skills">EVIDENCE</a></li>
-      <li><a href="#experience">FIELD LOG</a></li>
-      <li><a href="#projects">LABS</a></li>
-      <li><a href="#education">CREDENTIALS</a></li>
+      <li><a href="#watermark">FEATURED</a></li>
+      <li><a href="#certs">CERTS</a></li>
+      <li><a href="#skills">SKILLS</a></li>
+      <li><a href="#experience">EXPERIENCE</a></li>
+      <li><a href="#projects">PROJECTS</a></li>
+      <li><a href="#education">EDUCATION</a></li>
       <li><a href="#contact">CONTACT</a></li>
     </ul>
   </nav>
 
   <main id="top">
     <header class="hero">
-      <div class="hero-status"><span class="dot"></span> CASE OPEN · SECURITY+ · IAT II</div>
+      <div class="hero-status"><span class="dot"></span> SECURITY+ · IAT LEVEL II</div>
       <div class="glitch-wrap">
         <h1 class="hero-name" data-text="JANINA (NINA)">JANINA (NINA)</h1>
       </div>
@@ -1073,14 +1065,14 @@
         <span class="chip-link">📍 Remote</span>
       </div>
       <div class="hero-cta">
-        <a class="btn btn-primary" href="#watermark">WATERMARK ↓</a>
-        <a class="btn btn-ghost" href="#projects">MORE LABS</a>
+        <a class="btn btn-primary" href="#watermark">FEATURED PROJECT ↓</a>
+        <a class="btn btn-ghost" href="#projects">PROJECTS</a>
         <a class="btn btn-ghost" href="https://www.linkedin.com/in/janina-v-261210309/" target="_blank" rel="noopener">LINKEDIN ↗</a>
       </div>
     </header>
 
     <section id="about">
-      <p class="section-label">Case File 01 · Subject Profile</p>
+      <p class="section-label">About</p>
       <h2 class="section-title">About Me</h2>
       <div class="panel about-body">
         <p class="about-lead">
@@ -1108,100 +1100,24 @@
     </section>
 
     <section id="watermark">
-      <p class="section-label">Case File 02 · Active Investigation</p>
-      <h2 class="section-title">What I’m Building Now</h2>
+      <p class="section-label">Featured project</p>
       <div class="watermark-zone">
-        <div class="wm-header">
-          <div class="wm-title-block">
-            <h3>WATERMARK METER</h3>
-            <p class="wm-sub">OPEN SOURCE · METHODOLOGY-FIRST · v0.1</p>
-          </div>
-          <span class="wm-status-pill">● ACTIVE DEVELOPMENT</span>
-        </div>
-
-        <p class="wm-pitch">
-          <strong>Watermark</strong> is my current focus — an open-source CLI that measures the real energy, carbon, and water footprint of AI workloads. Not a guess from <code>cpu_percent</code>, but hardware reads where possible (RAPL, NVML), regional grid data where we must model, and <strong>every number tagged</strong> so reviewers can audit or challenge any assumption. Each run ships <code>measurements.csv</code>, <code>summary.json</code>, and interactive HTML dashboards — plus a portfolio view to compare the same workload across regions.
-        </p>
-
-        <div class="wm-metrics" aria-label="What Watermark measures">
-          <div class="wm-metric" title="Intel/AMD RAPL + NVIDIA NVML">
-            <span class="val">⚡ ENERGY</span>
-            <span class="lbl">RAPL · NVML · GPU</span>
-          </div>
-          <div class="wm-metric" title="EPA eGRID + IEA regional profiles">
-            <span class="val">🌫 CO₂e</span>
-            <span class="lbl">GRID CARBON</span>
-          </div>
-          <div class="wm-metric" title="WUE + generation water">
-            <span class="val">💧 H₂O</span>
-            <span class="lbl">DIRECT + INDIRECT</span>
-          </div>
-          <div class="wm-metric" title="WRI Aqueduct weighting">
-            <span class="val">◎ STRESS</span>
-            <span class="lbl">WATERSHED</span>
-          </div>
-          <div class="wm-metric" title="Measured vs modeled tags">
-            <span class="val">⌗ AUDIT</span>
-            <span class="lbl">SOURCE TAGS</span>
-          </div>
-        </div>
-
-        <div class="wm-split">
-          <div class="wm-terminal" aria-label="Example Watermark command output">
-            <div class="line"><span class="dim">$</span> watermark --duration 60 --region us-east-1 --output ./run1</div>
-            <div class="line"><span class="dim">[rapl_measured]</span> CPU package energy <span class="hi">integrated</span></div>
-            <div class="line"><span class="dim">[nvml_pynvml]</span> GPU board power <span class="hi">sampled</span></div>
-            <div class="line"><span class="dim">[pue_multiplier]</span> facility_kwh = it_kwh × 1.58</div>
-            <div class="line"><span class="dim">[modeled_annual_average]</span> co2e_kg → <span class="hi">tagged</span></div>
-            <div class="line">→ measurements.csv · summary.json · dashboard.html</div>
-            <div class="line"><span class="hi">✓</span> reproducible footprint report ready</div>
-          </div>
-
-          <div class="wm-log panel no-stamp" style="background: rgba(0,0,0,0.25); border: 1px solid rgba(201,168,124,0.3);">
-            <h4>FIELD NOTES — RECENT WORK</h4>
-            <ul class="wm-log-list" id="wm-log-list">
-              <li class="wm-log-item active" data-detail="Core metering engine: per-sample CSV, monotonic clock integration, RAPL wrap-around handling, multi-GPU NVML fallback via nvidia-smi.">
-                <span class="phase">CORE</span>
-                <span>Built the metering engine with hardware-first reads and honest fallbacks when RAPL isn’t available.</span>
-              </li>
-              <li class="wm-log-item" data-detail="Carbon, water, PUE, WUE, embodied preview (--hardware-sku), and WRI Aqueduct stress — each output line carries a source tag.">
-                <span class="phase">MODEL</span>
-                <span>Documented methodology (METHODOLOGY.md) so every modeled constant is challengeable.</span>
-              </li>
-              <li class="wm-log-item" data-detail="Auto-generated dashboard.html per run; portfolio.html scans summary.json trees for cross-region comparison.">
-                <span class="phase">VIZ</span>
-                <span>Shipped interactive dashboards and portfolio aggregation for benchmark-style comparisons.</span>
-              </li>
-              <li class="wm-log-item" data-detail="RunPod pod_setup.sh, workload wrappers, text/image/code/embeddings generators for repeatable experiments.">
-                <span class="phase">GPU</span>
-                <span>Tested on cloud GPU pods — wrapping real AI workloads, not synthetic loops.</span>
-              </li>
-              <li class="wm-log-item" data-detail="test_dashboard.py + test_portfolio.py — 44 tests guarding math and HTML output behavior.">
-                <span class="phase">QA</span>
-                <span>Added pytest coverage for dashboard and portfolio behavior before publishing numbers.</span>
-              </li>
-            </ul>
-            <p id="wm-log-detail" style="margin: 1rem 0 0; font-size: 0.82rem; color: var(--rose); min-height: 3em; line-height: 1.6;"></p>
-          </div>
-        </div>
-
-        <div class="wm-actions">
-          <a class="btn btn-primary" href="https://github.com/JaninaZV/Watermark" target="_blank" rel="noopener">VIEW ON GITHUB ↗</a>
-          <a class="btn btn-ghost" href="https://github.com/JaninaZV/Watermark/blob/master/METHODOLOGY.md" target="_blank" rel="noopener">READ METHODOLOGY</a>
-        </div>
+        <h2 class="wm-wordmark" aria-label="WaterMark">
+          <span class="wm-water">Water</span><a class="wm-mark" href="#watermark">Mark</a>
+        </h2>
       </div>
     </section>
 
     <section id="certs">
-      <p class="section-label">Case File 03 · Clearance Records</p>
+      <p class="section-label">Certifications</p>
       <h2 class="section-title">Certifications</h2>
       <div class="cert-grid">
-        <div class="panel cert-card no-stamp">
+        <div class="panel cert-card">
           <span class="cert-badge">ACTIVE</span>
           <h3>CompTIA Security+</h3>
           <p>DoD 8570/8140 compliant — validated knowledge in security, risk management, and enterprise/cloud security practices (IAT Level II).</p>
         </div>
-        <div class="panel cert-card no-stamp">
+        <div class="panel cert-card">
           <span class="cert-badge">IN PROGRESS</span>
           <h3>RHCSA</h3>
           <p>Red Hat Certified System Administrator — deepening RHEL administration, automation, and production Linux operations.</p>
@@ -1210,14 +1126,14 @@
     </section>
 
     <section id="skills">
-      <p class="section-label">Case File 04 · Evidence Index</p>
-      <h2 class="section-title">Skill Matrix</h2>
+      <p class="section-label">Skills</p>
+      <h2 class="section-title">Technical skills</h2>
       <div class="skill-grid" id="skill-grid"></div>
     </section>
 
     <section id="experience">
-      <p class="section-label">Case File 05 · Field Operations</p>
-      <h2 class="section-title">Experience Log</h2>
+      <p class="section-label">Experience</p>
+      <h2 class="section-title">Work experience</h2>
       <div class="timeline">
         <article class="job-card open">
           <button type="button" class="job-header" aria-expanded="true">
@@ -1294,7 +1210,7 @@
     </section>
 
     <section id="projects">
-      <p class="section-label">Case File 06 · Lab Archives</p>
+      <p class="section-label">Projects</p>
       <h2 class="section-title">Fellowship & Lab Work</h2>
       <p class="projects-subtitle">Hands-on projects from cybersecurity training — before Watermark became the main build.</p>
       <div class="project-grid">
@@ -1324,7 +1240,7 @@
     </section>
 
     <section id="education">
-      <p class="section-label">Case File 07 · Academic Record</p>
+      <p class="section-label">Education</p>
       <h2 class="section-title">Education</h2>
       <div class="edu-grid">
         <div class="panel edu-card">
@@ -1342,7 +1258,7 @@
     </section>
 
     <section id="contact">
-      <p class="section-label">Case File 08 · Establish Contact</p>
+      <p class="section-label">Contact</p>
       <h2 class="section-title">Get In Touch</h2>
       <div class="hero-cta">
         <a class="btn btn-primary" href="mailto:janinavallon@gmail.com">SEND EMAIL</a>
@@ -1355,7 +1271,7 @@
 
   <footer>
     <p class="footer-brand">Janina (Nina)</p>
-    <p class="footer-meta">Investigation dossier · <span id="year"></span></p>
+    <p class="footer-meta">Portfolio · <span id="year"></span></p>
   </footer>
 
   <div class="modal-backdrop" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>
@@ -1425,12 +1341,11 @@
     };
 
     const BOOT_LINES = [
-      "OPENING CASE FILE #JN-2026...",
-      "SUBJECT: JANINA (NINA)",
-      "VERIFYING CLEARANCE............ OK",
-      "INDEXING EVIDENCE: WATERMARK · SKILLS · OPS",
-      "STATUS: ACTIVE INVESTIGATION",
-      "WELCOME, REVIEWER.",
+      "Loading portfolio…",
+      "Janina (Nina)",
+      "Systems · security · sustainability",
+      "Featured: Watermark · experience · projects",
+      "Welcome.",
     ];
 
     // Skills render

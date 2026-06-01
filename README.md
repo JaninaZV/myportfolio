@@ -1,6 +1,6 @@
 # Janina Vallon — Portfolio
 
-Cyber-themed interactive portfolio (`index.html`). Source resume: `Janina Vallon_SysAdmin_Resume.pdf`.
+Interactive portfolio site (`index.html`). Source resume: `Janina Vallon_SysAdmin_Resume.pdf`.
 
 ## Local preview
 
