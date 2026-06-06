@@ -1212,43 +1212,55 @@
         <div class="wm-header">
           <div class="wm-title-block">
             <h3><a href="https://github.com/JaninaZV/Watermark" target="_blank" rel="noopener" class="wm-title-link"><span class="wm-word-water">WATER</span><span class="wm-word-mark">MARK</span></a></h3>
-            <p class="wm-sub">OPEN SOURCE · METHODOLOGY-FIRST · v0.1</p>
+            <p class="wm-sub">OPEN SOURCE · WATER-FIRST · v0.3 · AUDIT-READY</p>
           </div>
           <span class="wm-status-pill">● ACTIVE DEVELOPMENT</span>
         </div>
 
         <p class="wm-pitch">
-          <strong><a href="https://github.com/JaninaZV/Watermark" target="_blank" rel="noopener" class="wm-title-link wm-inline"><span class="wm-word-water">Water</span><span class="wm-word-mark">mark</span></a></strong> is my current focus — an open-source CLI that measures the real energy, carbon, and water footprint of AI workloads. Not a guess from <code>cpu_percent</code>, but hardware reads where possible (RAPL, NVML), regional grid data where we must model, and <strong>every number tagged</strong> so reviewers can audit or challenge any assumption. Each run ships <code>measurements.csv</code>, <code>summary.json</code>, and interactive HTML dashboards — plus a portfolio view to compare the same workload across regions.
+          <strong><a href="https://github.com/JaninaZV/Watermark" target="_blank" rel="noopener" class="wm-title-link wm-inline"><span class="wm-word-water">Water</span><span class="wm-word-mark">mark</span></a></strong> is my current focus — an open-source CLI that meters AI/compute workloads with <strong>water-first</strong> reporting. It answers what most footprint tools skip: <em>what did this job cost in watershed-weighted water, and was it drawn from a stressed basin?</em> Not a guess from <code>cpu_percent</code> — hardware reads where possible (RAPL, NVML), honest regional modeling elsewhere, carbon included for the <strong>carbon–water tradeoff</strong>, and <strong>every assumption tagged</strong> in <code>summary.json</code> (the public integration contract). v0.3 adds measurement grades (A/B/C), <code>audit-pack</code> exports, per-unit normalization via <code>annotate</code>, and <code>compare-regions</code> for compliance-style review.
         </p>
 
         <div class="wm-metrics" aria-label="What Watermark measures">
+          <div class="wm-metric" title="Watershed-Weighted Liters — canonical water unit">
+            <span class="val">💧 WWL</span>
+            <span class="lbl">PRIMARY KPI</span>
+          </div>
           <div class="wm-metric" title="Intel/AMD RAPL + NVIDIA NVML">
             <span class="val">⚡ ENERGY</span>
             <span class="lbl">RAPL · NVML · GPU</span>
           </div>
-          <div class="wm-metric" title="EPA eGRID + IEA regional profiles">
+          <div class="wm-metric" title="Operational CO₂e for regional tradeoff context">
             <span class="val">🌫 CO₂e</span>
-            <span class="lbl">GRID CARBON</span>
+            <span class="lbl">TRADEOFF CONTEXT</span>
           </div>
-          <div class="wm-metric" title="WUE + generation water">
-            <span class="val">💧 H₂O</span>
+          <div class="wm-metric" title="WUE direct cooling + grid generation water">
+            <span class="val">H₂O</span>
             <span class="lbl">DIRECT + INDIRECT</span>
           </div>
-          <div class="wm-metric" title="WRI Aqueduct weighting">
-            <span class="val">◎ STRESS</span>
-            <span class="lbl">WATERSHED</span>
+          <div class="wm-metric" title="measurement_grade A/B/C + audit-pack">
+            <span class="val">⌗ GRADE</span>
+            <span class="lbl">A/B/C · AUDIT PACK</span>
           </div>
-          <div class="wm-metric" title="Measured vs modeled tags">
-            <span class="val">⌗ AUDIT</span>
-            <span class="lbl">SOURCE TAGS</span>
+          <div class="wm-metric" title="Per-token/request via annotate or workload_metrics.json">
+            <span class="val">∕ UNIT</span>
+            <span class="lbl">TOKENS · REQUESTS</span>
           </div>
         </div>
 
         <div class="wm-split">
           <div class="wm-insight" aria-label="What Watermark is trying to solve">
             <p class="wm-problem-label">THE PROBLEM</p>
-            <p class="wm-problem-text">AI workloads burn energy, emit carbon, and consume water. Most tools don't measure it — or don't show their work. <a href="https://github.com/JaninaZV/Watermark" target="_blank" rel="noopener" class="wm-title-link wm-inline"><span class="wm-word-water">Water</span><span class="wm-word-mark">mark</span></a> is an attempt to change that.</p>
+            <p class="wm-problem-text">Every “green AI” story picks a region for low carbon. Few ask what that choice costs in water — or whether the basin is stressed. Most tools don’t measure it, or don’t show their work. <a href="https://github.com/JaninaZV/Watermark" target="_blank" rel="noopener" class="wm-title-link wm-inline"><span class="wm-word-water">Water</span><span class="wm-word-mark">mark</span></a> leads with watershed-weighted water and makes the carbon–water tradeoff visible.</p>
             <div class="wm-stats">
+              <div class="wm-stat">
+                <span class="wm-stat-icon">💧</span>
+                <span class="wm-stat-val" data-target="850">0</span>
+                <span class="wm-stat-unit">mL WWL</span>
+                <span class="wm-stat-lbl">WATER</span>
+                <span class="wm-stat-src">stress-weighted</span>
+                <span class="wm-stat-compare">primary KPI · v0.3</span>
+              </div>
               <div class="wm-stat">
                 <span class="wm-stat-icon">⚡</span>
                 <span class="wm-stat-val" data-target="0.4">0</span>
@@ -1263,42 +1275,38 @@
                 <span class="wm-stat-unit">g CO₂e</span>
                 <span class="wm-stat-lbl">CARBON</span>
                 <span class="wm-stat-src">grid model</span>
-                <span class="wm-stat-compare">≈ driving half a mile</span>
-              </div>
-              <div class="wm-stat">
-                <span class="wm-stat-icon">💧</span>
-                <span class="wm-stat-val" data-target="0.8">0</span>
-                <span class="wm-stat-unit">L H₂O</span>
-                <span class="wm-stat-lbl">WATER</span>
-                <span class="wm-stat-src">wue estimate</span>
-                <span class="wm-stat-compare">≈ less than a water bottle</span>
+                <span class="wm-stat-compare">tradeoff context</span>
               </div>
             </div>
-            <p class="wm-stat-caption">example run · 60s inference · us-east-1 · estimated</p>
+            <p class="wm-stat-caption">illustrative run · 60s inference · us-east-1 · grade C · modeled constants</p>
           </div>
 
           <div class="wm-log panel" style="background: rgba(0,0,0,0.25); border: 1px solid rgba(201,168,124,0.3);">
             <h4>FIELD NOTES — RECENT WORK</h4>
             <ul class="wm-log-list" id="wm-log-list">
-              <li class="wm-log-item active" data-detail="Core metering engine: per-sample CSV, monotonic clock integration, RAPL wrap-around handling, multi-GPU NVML fallback via nvidia-smi.">
-                <span class="phase">CORE</span>
-                <span>Built the metering engine with hardware-first reads and honest fallbacks when RAPL isn’t available.</span>
+              <li class="wm-log-item active" data-detail="schema_version 0.3, SCHEMA.md contract, structured caveats, WWL as canonical water unit, and summary.json as the public integration surface — not HTTP.">
+                <span class="phase">SCHEMA</span>
+                <span>Defined the artifact contract: WWL-first summary.json with versioned schema and structured caveats.</span>
               </li>
-              <li class="wm-log-item" data-detail="Carbon, water, PUE, WUE, embodied preview (--hardware-sku), and WRI Aqueduct stress — each output line carries a source tag.">
-                <span class="phase">MODEL</span>
-                <span>Documented methodology (METHODOLOGY.md) so every modeled constant is challengeable.</span>
+              <li class="wm-log-item" data-detail="measurement_grade A/B/C, audit-pack zip (methodology_hash, assumption lineage), operator disclosure registry, compare-regions, CI gate, and methodology_hash pinning.">
+                <span class="phase">TRUST</span>
+                <span>Shipped v0.3 enterprise trust: grades, audit-pack exports, and compare-regions tradeoffs.</span>
               </li>
-              <li class="wm-log-item" data-detail="Auto-generated dashboard.html per run; portfolio.html scans summary.json trees for cross-region comparison.">
+              <li class="wm-log-item" data-detail="watermark annotate for post-measurement token counts; workload_metrics.json auto-capture; summary.pre_annotation.json preserved for audit; normalization_applied_post_measurement in audit packs.">
+                <span class="phase">PROD</span>
+                <span>Added annotate for production token counts without losing measurement-time artifacts.</span>
+              </li>
+              <li class="wm-log-item" data-detail="WWL-first KPI ordering in dashboard and portfolio; carbon vs WWL scatter; regional per-unit charts; workload_type guard for training vs inference.">
                 <span class="phase">VIZ</span>
-                <span>Shipped interactive dashboards and portfolio aggregation for benchmark-style comparisons.</span>
+                <span>Reordered dashboards and portfolio so watershed-weighted water leads carbon.</span>
               </li>
-              <li class="wm-log-item" data-detail="RunPod pod_setup.sh, workload wrappers, text/image/code/embeddings generators for repeatable experiments.">
+              <li class="wm-log-item" data-detail="Core metering: per-sample CSV, RAPL wrap-around, NVML/nvidia-smi fallback, RunPod pod_setup.sh, reference workloads (text/code/image/embeddings).">
                 <span class="phase">GPU</span>
-                <span>Tested on cloud GPU pods — wrapping real AI workloads, not synthetic loops.</span>
+                <span>Hardware-first metering on cloud GPU pods with real AI workloads, not synthetic loops.</span>
               </li>
-              <li class="wm-log-item" data-detail="test_dashboard.py + test_portfolio.py — 44 tests guarding math and HTML output behavior.">
+              <li class="wm-log-item" data-detail="test_v03_trust.py, test_schema_contract.py, test_water_profile.py — 78+ tests covering grades, audit packs, annotate, and schema validation.">
                 <span class="phase">QA</span>
-                <span>Added pytest coverage for dashboard and portfolio behavior before publishing numbers.</span>
+                <span>Expanded pytest coverage for trust features and schema contracts before publishing numbers.</span>
               </li>
             </ul>
             <p id="wm-log-detail" style="margin: 1rem 0 0; font-size: 0.82rem; color: var(--rose); min-height: 3em; line-height: 1.6;"></p>
@@ -1307,7 +1315,8 @@
 
         <div class="wm-actions">
           <a class="btn btn-primary" href="https://github.com/JaninaZV/Watermark" target="_blank" rel="noopener">VIEW ON GITHUB ↗</a>
-          <a class="btn btn-ghost" href="https://github.com/JaninaZV/Watermark/blob/master/METHODOLOGY.md" target="_blank" rel="noopener">READ METHODOLOGY</a>
+          <a class="btn btn-ghost" href="https://github.com/JaninaZV/Watermark/blob/master/METHODOLOGY.md" target="_blank" rel="noopener">METHODOLOGY</a>
+          <a class="btn btn-ghost" href="https://github.com/JaninaZV/Watermark/blob/master/SCHEMA.md" target="_blank" rel="noopener">SCHEMA</a>
         </div>
       </div>
     </section>
@@ -1531,15 +1540,16 @@
       },
       watermark: {
         title: "Watermark",
-        body: `<p><strong><a href="https://github.com/JaninaZV/Watermark" target="_blank" rel="noopener" class="wm-title-link wm-inline"><span class="wm-word-water">Water</span><span class="wm-word-mark">mark</span></a></strong> is an open-source CLI that measures the true energy, carbon, and water cost of AI workloads — with every assumption auditable.</p>
+        body: `<p><strong><a href="https://github.com/JaninaZV/Watermark" target="_blank" rel="noopener" class="wm-title-link wm-inline"><span class="wm-word-water">Water</span><span class="wm-word-mark">mark</span></a></strong> (v0.3) is an open-source CLI for water-first AI footprint metering — <strong>WWL</strong> (Watershed-Weighted Liters) as the primary KPI, carbon for tradeoff context, every assumption auditable.</p>
           <ul>
-            <li>Reads CPU energy from RAPL and GPU power from NVML when available</li>
-            <li>Regional grid carbon, PUE, WUE, and watershed stress modeling</li>
-            <li>Outputs <code>measurements.csv</code>, <code>summary.json</code>, and interactive HTML dashboards</li>
-            <li>Portfolio view for comparing runs across regions</li>
+            <li>Hardware-first energy reads (RAPL, NVML) with honest regional water/carbon modeling</li>
+            <li><code>summary.json</code> artifact contract — grades A/B/C, <code>audit-pack</code>, <code>gate</code>, <code>compare-regions</code></li>
+            <li>Per-unit normalization at measure time or post-hoc via <code>watermark annotate</code></li>
+            <li>Dashboard + portfolio with WWL-first KPIs; pre-annotation audit trail for compliance review</li>
           </ul>`,
         links: [
           { label: "GitHub Repo", href: "https://github.com/JaninaZV/Watermark" },
+          { label: "Schema", href: "https://github.com/JaninaZV/Watermark/blob/master/SCHEMA.md" },
         ],
       },
     };
@@ -1565,7 +1575,7 @@
 
     // Typewriter
     const roles = [
-      { text: "Building Watermark — AI footprint metering", html: 'Building <span class="wm-word-water">Water</span><span class="wm-word-mark">mark</span> — AI footprint metering' },
+      { text: "Building Watermark — water-first AI footprint metering", html: 'Building <span class="wm-word-water">Water</span><span class="wm-word-mark">mark</span> — water-first AI footprint metering' },
       { text: "Systems Engineer \xB7 Enterprise infrastructure" },
       { text: "Security+ \xB7 RHEL \xB7 AWS \xB7 VMS" },
     ];

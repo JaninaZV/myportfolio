@@ -18,4 +18,4 @@ open index.html
 
 - Cybersecurity Lab
 - AWS Practice Labs
-- [Watermark Meter](https://github.com/JaninaZV/Watermark) — open-source AI workload footprint CLI
+- [Watermark Meter](https://github.com/JaninaZV/Watermark) — v0.3 open-source CLI for water-first AI footprint metering (WWL, audit packs, compliance exports)
