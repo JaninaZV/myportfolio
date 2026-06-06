@@ -916,6 +916,19 @@
       color: var(--muted);
       margin-top: 0.4rem;
     }
+    .wm-metrics-note {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.5;
+      margin: -0.85rem 0 1.75rem;
+      max-width: var(--prose-width);
+      position: relative;
+      z-index: 1;
+    }
+    .wm-metrics-note strong {
+      color: var(--cream);
+      font-weight: 500;
+    }
 
     .wm-split {
       display: grid;
@@ -1229,7 +1242,7 @@
         </div>
 
         <div class="wm-metrics" aria-label="What Watermark measures">
-          <div class="wm-metric" title="Watershed-weighted water — the primary metric">
+          <div class="wm-metric" title="Watershed-Weighted Liters: operational water adjusted for basin stress">
             <span class="val">💧 WWL</span>
             <span class="lbl">water first</span>
           </div>
@@ -1246,6 +1259,7 @@
             <span class="lbl">tradeoff context</span>
           </div>
         </div>
+        <p class="wm-metrics-note"><strong>WWL</strong> = watershed-weighted liters — water adjusted for how stressed the basin is.</p>
 
         <div class="wm-split">
           <div class="wm-insight" aria-label="What Watermark is trying to solve">
