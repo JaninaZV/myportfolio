@@ -870,6 +870,8 @@
       max-width: var(--prose-width);
       margin-bottom: 1.85rem;
     }
+    .wm-pitch p { margin: 0 0 1rem; }
+    .wm-pitch p:last-child { margin-bottom: 0; }
     .wm-pitch strong { color: var(--rose); }
     .wm-pitch code {
       font-family: var(--font-mono);
@@ -1217,9 +1219,14 @@
           <span class="wm-status-pill">● ACTIVE DEVELOPMENT</span>
         </div>
 
-        <p class="wm-pitch">
-          <strong><a href="https://github.com/JaninaZV/Watermark" target="_blank" rel="noopener" class="wm-title-link wm-inline"><span class="wm-word-water">Water</span><span class="wm-word-mark">mark</span></a></strong> is my current focus — an open-source CLI that meters AI/compute workloads with <strong>water-first</strong> reporting. It answers what most footprint tools skip: <em>what did this job cost in watershed-weighted water, and was it drawn from a stressed basin?</em> Not a guess from <code>cpu_percent</code> — hardware reads where possible (RAPL, NVML), honest regional modeling elsewhere, carbon included for the <strong>carbon–water tradeoff</strong>, and <strong>every assumption tagged</strong> in <code>summary.json</code> (the public integration contract). v0.3 adds measurement grades (A/B/C), <code>audit-pack</code> exports, per-unit normalization via <code>annotate</code>, and <code>compare-regions</code> for compliance-style review.
-        </p>
+        <div class="wm-pitch">
+          <p>
+            <strong><a href="https://github.com/JaninaZV/Watermark" target="_blank" rel="noopener" class="wm-title-link wm-inline"><span class="wm-word-water">Water</span><span class="wm-word-mark">mark</span></a></strong> is what I’m building now: an open-source tool that measures what AI workloads actually cost in energy, carbon, and water. Most tools optimize for carbon and stop there. This one starts with water, and shows its work.
+          </p>
+          <p>
+            It reads from the hardware when it can. When it can’t, it models honestly and tags every assumption so you can challenge the numbers. Water is weighted by how stressed the basin is. Carbon is there too, so you can see when the greener region on paper isn’t the greener one on water. Nobody should have to take my word for it. Every run is built to be reviewed, with confidence grades and exportable audit packs for anyone who needs to follow the math.
+          </p>
+        </div>
 
         <div class="wm-metrics" aria-label="What Watermark measures">
           <div class="wm-metric" title="Watershed-Weighted Liters — canonical water unit">
@@ -1284,32 +1291,29 @@
           <div class="wm-log panel" style="background: rgba(0,0,0,0.25); border: 1px solid rgba(201,168,124,0.3);">
             <h4>FIELD NOTES — RECENT WORK</h4>
             <ul class="wm-log-list" id="wm-log-list">
-              <li class="wm-log-item active" data-detail="schema_version 0.3, SCHEMA.md contract, structured caveats, WWL as canonical water unit, and summary.json as the public integration surface — not HTTP.">
-                <span class="phase">SCHEMA</span>
-                <span>Defined the artifact contract: WWL-first summary.json with versioned schema and structured caveats.</span>
+              <li class="wm-log-item active" data-detail="RAPL and NVML where the hardware allows, with honest fallbacks when it doesn’t.">
+                <span class="phase">MEASURE</span>
+                <span>I built a CLI that reads real GPU and CPU energy on cloud pods, wrapping actual AI workloads, not synthetic benchmarks.</span>
               </li>
-              <li class="wm-log-item" data-detail="measurement_grade A/B/C, audit-pack zip (methodology_hash, assumption lineage), operator disclosure registry, compare-regions, CI gate, and methodology_hash pinning.">
+              <li class="wm-log-item" data-detail="Surfaces when a low-carbon region still carries a high water cost.">
+                <span class="phase">WATER FIRST</span>
+                <span>Water is a first-class metric, weighted by watershed stress, not just liters on a spreadsheet.</span>
+              </li>
+              <li class="wm-log-item" data-detail="One-click bundles for compliance-style review, plus side-by-side region comparisons.">
                 <span class="phase">TRUST</span>
-                <span>Shipped v0.3 enterprise trust: grades, audit-pack exports, and compare-regions tradeoffs.</span>
+                <span>Confidence grades and exportable audit packs so reviewers can follow every assumption.</span>
               </li>
-              <li class="wm-log-item" data-detail="watermark annotate for post-measurement token counts; workload_metrics.json auto-capture; summary.pre_annotation.json preserved for audit; normalization_applied_post_measurement in audit packs.">
-                <span class="phase">PROD</span>
-                <span>Added annotate for production token counts without losing measurement-time artifacts.</span>
+              <li class="wm-log-item" data-detail="Same workload, different regions: see the carbon–water tradeoff in one place.">
+                <span class="phase">DASHBOARDS</span>
+                <span>Dashboards and portfolio views lead with water, then carbon, so regional comparisons tell the full story.</span>
               </li>
-              <li class="wm-log-item" data-detail="WWL-first KPI ordering in dashboard and portfolio; carbon vs WWL scatter; regional per-unit charts; workload_type guard for training vs inference.">
-                <span class="phase">VIZ</span>
-                <span>Reordered dashboards and portfolio so watershed-weighted water leads carbon.</span>
-              </li>
-              <li class="wm-log-item" data-detail="Core metering: per-sample CSV, RAPL wrap-around, NVML/nvidia-smi fallback, RunPod pod_setup.sh, reference workloads (text/code/image/embeddings).">
-                <span class="phase">GPU</span>
-                <span>Hardware-first metering on cloud GPU pods with real AI workloads, not synthetic loops.</span>
-              </li>
-              <li class="wm-log-item" data-detail="test_v03_trust.py, test_schema_contract.py, test_water_profile.py — 78+ tests covering grades, audit packs, annotate, and schema validation.">
-                <span class="phase">QA</span>
-                <span>Expanded pytest coverage for trust features and schema contracts before publishing numbers.</span>
+              <li class="wm-log-item" data-detail="For teams that don’t know token counts at measure time, per-unit figures can still be added afterward.">
+                <span class="phase">REAL WORLD</span>
+                <span>Built for production: meter the job first, add token counts from logs later without overwriting the original run.</span>
               </li>
             </ul>
             <p id="wm-log-detail" style="margin: 1rem 0 0; font-size: 0.82rem; color: var(--rose); min-height: 3em; line-height: 1.6;"></p>
+            <p style="margin: 0.75rem 0 0; font-size: 0.78rem; color: var(--muted); line-height: 1.5;">Full methodology and schema live on GitHub for anyone who wants to go deeper.</p>
           </div>
         </div>
 
